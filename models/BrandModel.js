@@ -9,7 +9,7 @@ const brandSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-});
+}, { versionKey: '_somethingElse' });
 
 const brand = mongoose.model("brand", brandSchema);
 

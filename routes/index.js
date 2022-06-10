@@ -1,4 +1,5 @@
 const {Router} = require('express')
+const router = Router({mergeParams:true})
 
 const {router:brandRouter} = require('./BrandRouters')
 const {router:categoryRouter} = require('./CategoryRouters') 
@@ -11,7 +12,6 @@ const {router:employeeRouter} = require('./EmployeeRouters')
 // const {router:paymentRouter} = require('./PaymentRouters')
 const {router:productRouter} = require('./ProductRouters')
 const {router:supplierRouter} = require('./SupplierRouters')
-const router = Router({mergeParams:true})
 
 router.use('/brand',brandRouter)
 router.use('/category',categoryRouter)

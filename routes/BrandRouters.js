@@ -1,12 +1,12 @@
 const {Router} = require('express');
+const { uploadFile } = require('../middlewares/uploadFile');
 const brand = require('../models/BrandModel');
 const brandService = require('../services/BrandService');
 const router = Router({ mergeParams: true })
 
 router
-    .post('/', (req,res)=>{
-        
-        brandService.create(req.body)
+    .post('/', uploadFile, (req,res)=>{
+        brandService.create({...req.body,brandImage:req.file.filename})
             .then(brand => {
                 res.status(201).json(brand);
             })
@@ -33,9 +33,8 @@ router
             res.status(400).json({message: 'gui lai request'});
         })
     })
-    .put('/:id', (req,res)=>{
-        console.log(req.params.id)
-        brandService.update(req.params.id, req.body)
+    .put('/:id',uploadFile, (req,res)=>{
+        brandService.update(req.params.id, {...req.body,brandImage:req.file.filename})
         .then(brand =>{
             res.status(200).json(brand)
         })
