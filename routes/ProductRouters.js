@@ -25,21 +25,22 @@ router
             })
     })
     .delete('/:id', (req,res)=>{
+        console.log(req.params.id)
         productService.deleteOne(req.params.id)
         .then(product =>{
             res.status(200).json(product);
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'});
+            res.status(400).json({message: err});
         })
     })
-    .put('/:id', (req,res)=>{
-        productService.update(req.params.id, req.body)
+    .put('/:id', uploadFile, (req,res)=>{
+        productService.update({...req.body, productImage: req.file.filename})
         .then(product =>{
             res.status(200).json(product)
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'})
+            res.status(400).json({message: err})
         })
     })
   

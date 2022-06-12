@@ -15,7 +15,7 @@ router
                 res.status(400).json({message: err});
             })
     })
-    .get('/', verifyToken, (req,res)=>{
+    .get('/', (req,res)=>{
         
         brandService.findAll(req.body)
             .then(brand => {
@@ -31,7 +31,7 @@ router
             res.status(200).json(brand);
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'});
+            res.status(400).json({message: err});
         })
     })
     .put('/:id',uploadFile, (req,res)=>{
@@ -40,7 +40,7 @@ router
             res.status(200).json(brand)
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'})
+            res.status(400).json({message: err})
         })
     })
   

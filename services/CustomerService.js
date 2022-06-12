@@ -17,7 +17,7 @@ const findByEmail = (email) =>{
 }
  
 const deleteOne = (id) => {
-    return customer.deleteOne({id})
+    return customer.findOneAndDelete({_id: id})
 }
  
 const update = (id, inputcustomer) =>{

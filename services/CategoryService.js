@@ -13,7 +13,7 @@ const findbyName = (categoryName) => {
 }
 
 const deleteOne = (id) => {
-    return category.deleteOne({id})
+    return category.findOneAndDelete({_id: id})
 }
 
 const update = (id, inputcategory) =>{

@@ -1,11 +1,11 @@
 const product  = require("../models/ProductModel");
 
 const create = ({productName,productImage,unit,productStatus,categoryId,brandId})=>{
-   return product.create({productName, productImage, unit, productStatus, categoryId, brandId});
+   return product.create({productName, productImage, unit, productStatus, categoryId, brandId})
 }
 
 const findAll = () => {
-    return product.find({})
+    return product.find({}).populate("categoryId").populate("brandId")
 }
 
 const findbyName = (productName) => {
@@ -17,7 +17,7 @@ const findbyID = (id) => {
 }
 
 const deleteOne = (id) => {
-    return product.deleteOne({id})
+    return product.findOneAndDelete({_id: id})
 }
 
 const update = (id, inputproduct) =>{
