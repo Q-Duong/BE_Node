@@ -1,29 +1,13 @@
 const mongoose = require("mongoose");
+const  abstractUserModel  = require("./AbstractUserModel");
 
 const customerSchema = new mongoose.Schema({
-    customerName: {
+    ...abstractUserModel,
+    phone: {
         type: String,
-        required: true,
     },
-    customerPhone: {
+    address: {
         type: String,
-        required: true,
-    },
-    customerAddress: {
-        type: String,
-        required: true,
-    },
-    customerEmail: {
-        type: String,
-        required: true,
-    },
-    customerPassword: {
-        type: String,
-        required: true,
-    },
-    customerActive: {
-        type: Boolean,
-        required: true,
     },
 });
 

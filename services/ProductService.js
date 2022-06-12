@@ -12,6 +12,10 @@ const findbyName = (productName) => {
     return product.findOne({productName})
 }
 
+const findbyID = (id) => {
+    return product.findById(id)
+}
+
 const deleteOne = (id) => {
     return product.deleteOne({id})
 }
@@ -21,4 +25,4 @@ const update = (id, inputproduct) =>{
 }
 
 
-module.exports = {create , findAll, findbyName, deleteOne, update }
+module.exports = {create , findAll, findbyName, deleteOne, update , findbyID}

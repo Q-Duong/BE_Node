@@ -1,5 +1,4 @@
 const {Router} = require('express');
-const supplier = require('../models/SupplierModel');
 const supplierService = require('../services/SupplierService');
 const router = Router({ mergeParams: true })
 

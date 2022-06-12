@@ -12,6 +12,8 @@ const {router:employeeRouter} = require('./EmployeeRouters')
 // const {router:paymentRouter} = require('./PaymentRouters')
 const {router:productRouter} = require('./ProductRouters')
 const {router:supplierRouter} = require('./SupplierRouters')
+const {router:warehouseRouter} = require('./WarehouseRouter')
+
 
 router.use('/brand',brandRouter)
 router.use('/category',categoryRouter)
@@ -24,4 +26,5 @@ router.use('/employee',employeeRouter)
 // router.use('/payment',paymentRouter)
 router.use('/product',productRouter)
 router.use('/supplier',supplierRouter)
+router.use('/warehouse',warehouseRouter)
 module.exports = router

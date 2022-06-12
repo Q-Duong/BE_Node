@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const brandSchema = new mongoose.Schema({
+    ...abstractModel,
     brandName: {
         type: String,
         required: true,
@@ -9,7 +11,7 @@ const brandSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-}, { versionKey: '_somethingElse' });
+});
 
 const brand = mongoose.model("brand", brandSchema);
 

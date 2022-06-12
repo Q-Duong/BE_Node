@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const exportOrder = require("./ExportOrder");
+const abstractModel  = require("./AbstractModel");
 
 const paymentSchema = new mongoose.Schema({
+    ...abstractModel,
     type: {
         type: String,
         enum: ['New','Success','Fail','Return']

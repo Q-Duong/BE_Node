@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const supplierSchema = new mongoose.Schema({
+    ...abstractModel,
     supplierName: {
         type: String,
         required: true,

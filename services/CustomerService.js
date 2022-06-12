@@ -1,7 +1,7 @@
 const customer  = require("../models/CustomerModel");
 
-const create = ({customerName,customerPhone,customerAddress,customerEmail,customerPassword,customerActive})=>{
-   return customer.create({customerName, customerPhone, customerAddress, customerEmail, customerPassword, customerActive});
+const create = (inputCustomer)=>{
+   return customer.create({...inputCustomer});
 }
 
 const findAll = () => {
@@ -12,8 +12,8 @@ const findbyName = (customerName) => {
     return customer.findOne({customerName})
 }
 
-const findByEmail = (customerEmail) =>{
-    return customer.findOne({customerEmail})
+const findByEmail = (email) =>{
+    return customer.findOne({email})
 }
  
 const deleteOne = (id) => {

@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const productSchema = new mongoose.Schema({
+    ...abstractModel,
     productName: {
         type: String,
         required: true,

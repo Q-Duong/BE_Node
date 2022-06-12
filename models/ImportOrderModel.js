@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const importOrderSchema = new mongoose.Schema({
+    ...abstractModel,
     createAt: {
         type: Date,
         default: Date.now,

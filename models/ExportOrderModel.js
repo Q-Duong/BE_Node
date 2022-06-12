@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const exportOrderSchema = new mongoose.Schema({
+    ...abstractModel,
     createAt: {
         type: Date,
         default: Date.now,

@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+const abstractModel  = require("./AbstractModel");
 
 const importOrderDetailsSchema = new mongoose.Schema({
+    ...abstractModel,
     productSupplierId: {
         type: Number,
         required: true,

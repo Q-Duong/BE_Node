@@ -1,4 +1,5 @@
 const {Router} = require('express');
+const { verifyToken } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
 const brand = require('../models/BrandModel');
 const brandService = require('../services/BrandService');
@@ -14,7 +15,7 @@ router
                 res.status(400).json({message: err});
             })
     })
-    .get('/', (req,res)=>{
+    .get('/', verifyToken, (req,res)=>{
         
         brandService.findAll(req.body)
             .then(brand => {

@@ -1,12 +1,12 @@
 const {Router} = require('express');
-const product = require('../models/ProductModel');
 const productService = require('../services/ProductService');
 const router = Router({ mergeParams: true })
+const { uploadFile } = require('../middlewares/uploadFile');
+
 
 router
-    .post('/', (req,res)=>{
-        
-        productService.create(req.body)
+    .post('/',uploadFile, (req,res)=>{
+        productService.create({...req.body, productImage: req.file.filename})
             .then(product => {
                 res.status(201).json(product);
             })

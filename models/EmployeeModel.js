@@ -1,28 +1,9 @@
 const mongoose = require("mongoose");
-
+const abstractUserModel =  require("./AbstractUserModel");
 const employeeSchema = new mongoose.Schema({
-    employeeName: {
+    ...abstractUserModel,
+    phone: {
         type: String,
-        required: true,
-    },
-    employeePhone: {
-        type: String,
-        required: true,
-    },
-    employeeEmail: {
-        type: String,
-        required: true,
-    },
-    employeePassword: {
-        type: String,
-        required: true,
-    },
-    employeeRole: {
-        type: String,
-        enum: ['Manager','Staff','President','Admin']
-    },
-    employeeActive: {
-        type: Boolean,
         required: true,
     },
 });

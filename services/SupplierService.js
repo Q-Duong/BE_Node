@@ -20,5 +20,8 @@ const update = (id, inputsupplier) =>{
     return supplier.findOneAndUpdate({_id: id},{...inputsupplier});
 }
 
+const findbyID = (id) => {
+    return supplier.findById(id)
+}
 
-module.exports = {create , findAll, findbyName, deleteOne, update }
+module.exports = {create , findAll, findbyName, deleteOne, update, findbyID }
