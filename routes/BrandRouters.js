@@ -7,7 +7,7 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', uploadFile, (req,res)=>{
-        brandService.create({...req.body,brandImage:req.file.filename})
+        brandService.create({...req.body,image:req.file.filename})
             .then(brand => {
                 res.status(201).json(brand);
             })
@@ -15,8 +15,7 @@ router
                 res.status(400).json({message: err});
             })
     })
-    .get('/', verifyToken, (req,res)=>{
-        
+    .get('/', (req,res)=>{
         brandService.findAll(req.body)
             .then(brand => {
                 res.status(200).json(brand);
@@ -35,7 +34,7 @@ router
         })
     })
     .put('/:id',uploadFile, (req,res)=>{
-        brandService.update(req.params.id, {...req.body,brandImage:req.file.filename})
+        brandService.update(req.params.id, {...req.body,image:req.file.filename})
         .then(brand =>{
             res.status(200).json(brand)
         })

@@ -1,23 +1,19 @@
 const exportOrder  = require("../models/ExportOrderModel");
 
-const create = ({createAt,total,exportOrderStatus,employeeId,customerId})=>{
-   return exportOrder.create({createAt, total, exportOrderStatus, employeeId, customerId});
+const create = (inputExportOrder)=>{
+   return exportOrder.create(inputExportOrder);
 }
 
 const findAll = () => {
     return exportOrder.find({})
 }
 
-const findbyName = (exportOrderName) => {
-    return exportOrder.findOne({exportOrderName})
-}
-
 const deleteOne = (id) => {
     return exportOrder.deleteOne({id})
 }
 
-const update = (id, inputexportOrder) =>{
-    return exportOrder.findOneAndUpdate({_id: id},{...inputexportOrder});
+const update = (id, inputExportOrder) =>{
+    return exportOrder.findOneAndUpdate({_id: id},{...inputExportOrder});
 }
 
-module.exports = {create , findAll, findbyName, deleteOne, update }
+module.exports = {create , findAll, deleteOne, update }

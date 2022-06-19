@@ -12,7 +12,7 @@ const paymentSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    exportOrderId: {
+    exportOrder: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "exportOrder"
     }

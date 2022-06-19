@@ -1,7 +1,7 @@
 const brand  = require("../models/BrandModel");
 
-const create = ({brandName,brandImage})=>{
-   return brand.create({brandName, brandImage});
+const create = (inputBrand)=>{
+   return brand.create(inputBrand);
 }
 
 const findAll = () => {
@@ -16,8 +16,8 @@ const deleteOne = (id) => {
     return brand.deleteOne({id})
 }
 
-const update = (id, inputbrand) =>{
-    return brand.findOneAndUpdate({_id: id},{...inputbrand});
+const update = (id, inputBrand) =>{
+    return brand.findOneAndUpdate({_id: id},{...inputbrand}, {new:true});
 }
 
 module.exports = {create , findAll, findbyName, deleteOne, update }

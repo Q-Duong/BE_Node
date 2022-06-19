@@ -3,23 +3,19 @@ const abstractModel  = require("./AbstractModel");
 
 const exportOrderSchema = new mongoose.Schema({
     ...abstractModel,
-    createAt: {
-        type: Date,
-        default: Date.now,
-    },
-    total: {
-        type: double,
+    totalBill: {
+        type: Number,
         required: true,
     },
-    exportOrderStatus: {
+    status: {
         type: String,
         enum: ['New','Paid','Cancle']
     },
-    employeeId: {
+    employee: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "employee"
     },
-    customerId: {
+    customer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "customer"
     },

@@ -3,7 +3,7 @@ const abstractModel = {
         type: Date,
         default: Date.now
     },
-    createdAt: {
+    updatedAt: {
         type: Date,
         default: Date.now
     },

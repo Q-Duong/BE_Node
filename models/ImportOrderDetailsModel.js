@@ -3,17 +3,16 @@ const abstractModel  = require("./AbstractModel");
 
 const importOrderDetailsSchema = new mongoose.Schema({
     ...abstractModel,
-    productSupplierId: {
-        type: Number,
-        required: true,
-        unique: true,
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product'
     },
     productQuantity: {
         type: Number,
         required: true,
     },
     productPrice: {
-        type: double,
+        type: Number,
         required: true,
     },
     

@@ -3,7 +3,7 @@ const abstractModel  = require("./AbstractModel");
 
 const supplierSchema = new mongoose.Schema({
     ...abstractModel,
-    supplierName: {
+    name: {
         type: String,
         required: true,
     },
@@ -15,6 +15,10 @@ const supplierSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product'
+    }]
 });
 
 const supplier = mongoose.model("supplier", supplierSchema);

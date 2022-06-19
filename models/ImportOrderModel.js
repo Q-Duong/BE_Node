@@ -3,31 +3,27 @@ const abstractModel  = require("./AbstractModel");
 
 const importOrderSchema = new mongoose.Schema({
     ...abstractModel,
-    createAt: {
-        type: Date,
-        default: Date.now,
-    },
-    total: {
-        type: double,
+    totalBill: {
+        type: Number,
         required: true,
     },
     duration: {
         type: Number,
-       
+        default: 0
     },
     loan: {
-        type: double,
-        
+        type: Number,
+        default: 0,
     },
-    importOrderStatus: {
+    status: {
         type: String,
         enum: ['Paid','Debt']
     },
-    supplierId: {
+    supplier: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "supplier"
     },
-    importOrderDetails: [{
+    details: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "importOrderDetails"
     }],

@@ -1,27 +1,27 @@
 const supplier  = require("../models/SupplierModel");
 
-const create = ({supplierName,address,phone})=>{
-   return supplier.create({supplierName, address, phone});
+const create = (inputSupplier)=>{
+   return supplier.create(inputSupplier);
 }
 
 const findAll = () => {
     return supplier.find({})
 }
 
-const findbyName = (supplierName) => {
-    return supplier.findOne({supplierName})
+const findbyName = (name) => {
+    return supplier.findOne({name})
 }
 
 const deleteOne = (id) => {
     return supplier.deleteOne({id})
 }
 
-const update = (id, inputsupplier) =>{
-    return supplier.findOneAndUpdate({_id: id},{...inputsupplier});
+const update = (id, inputSupplier) =>{
+    return supplier.findOneAndUpdate({_id: id},{...inputSupplier});
 }
 
-const findbyID = (id) => {
+const findbyId = (id) => {
     return supplier.findById(id)
 }
 
-module.exports = {create , findAll, findbyName, deleteOne, update, findbyID }
+module.exports = {create , findAll, findbyName, deleteOne, update, findbyId }

@@ -3,11 +3,11 @@ const abstractModel  = require("./AbstractModel");
 
 const categorySchema = new mongoose.Schema({
     ...abstractModel,
-    categoryName: {
+    name: {
         type: String,
         required: true,
     },
-    categoryImage: {
+    image: {
         type: String,
         required: true,
     },

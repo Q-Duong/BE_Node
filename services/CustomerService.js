@@ -1,15 +1,15 @@
 const customer  = require("../models/CustomerModel");
 
 const create = (inputCustomer)=>{
-   return customer.create({...inputCustomer});
+   return customer.create(inputCustomer);
 }
 
 const findAll = () => {
     return customer.find({})
 }
 
-const findbyName = (customerName) => {
-    return customer.findOne({customerName})
+const findbyName = (name) => {
+    return customer.findOne({name})
 }
 
 const findByEmail = (email) =>{
@@ -20,8 +20,8 @@ const deleteOne = (id) => {
     return customer.deleteOne({id})
 }
  
-const update = (id, inputcustomer) =>{
-    return customer.findOneAndUpdate({_id: id},{...inputcustomer});
+const update = (id, inputCustomer) =>{
+    return customer.findOneAndUpdate({_id: id},{...inputCustomer});
 }
  
 module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail}

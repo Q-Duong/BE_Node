@@ -1,23 +1,23 @@
 const category  = require("../models/CategoryModel");
 
-const create = ({categoryName,categoryImage})=>{
-   return category.create({categoryName, categoryImage});
+const create = (inputCategory)=>{
+   return category.create(inputCategory);
 }
 
 const findAll = () => {
     return category.find({})
 }
 
-const findbyName = (categoryName) => {
-    return category.findOne({categoryName})
+const findbyName = (name) => {
+    return category.findOne({name})
 }
 
 const deleteOne = (id) => {
     return category.deleteOne({id})
 }
 
-const update = (id, inputcategory) =>{
-    return category.findOneAndUpdate({_id: id},{...inputcategory});
+const update = (id, inputCategory) =>{
+    return category.findOneAndUpdate({_id: id},{...inputCategory});
 }
 
 module.exports = {create , findAll, findbyName, deleteOne, update }

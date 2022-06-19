@@ -3,7 +3,7 @@ const abstractModel  = require("./AbstractModel");
 
 const productSchema = new mongoose.Schema({
     ...abstractModel,
-    productName: {
+    name: {
         type: String,
         required: true,
     },
@@ -11,22 +11,30 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    productImage: {
+    image: {
         type: String,
         required: true,
     },
-    productStatus: {
+    status: {
         type: String,
         required: true,
     },
-    categoryId: {
+    expireNumber: {
+        type: Number,
+        default: 1
+    },
+    expireUnit: {
+        type: String,
+        enum: ['day', 'month', 'year']
+    },
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "category",
     },
-    brandId: {
+    brand: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "brand"
-    }
+    },
 });
 
 const product = mongoose.model("product", productSchema);

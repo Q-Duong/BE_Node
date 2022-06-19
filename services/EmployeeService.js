@@ -1,27 +1,27 @@
 const employee  = require("../models/EmployeeModel");
 
-const create = ({employeeName,employeePhone,employeeEmail,employeePassword,employeeRole,employeeActive})=>{
-   return employee.create({employeeName, employeePhone, employeeEmail, employeePassword, employeeRole, employeeActive});
+const create = (inputEmployee)=>{
+   return employee.create(inputEmployee);
 }
 
 const findAll = () => {
     return employee.find({})
 }
 
-const findbyName = (employeeName) => {
-    return employee.findOne({employeeName})
+const findbyName = (name) => {
+    return employee.findOne({name})
 }
 
-const findByEmail = (employeeEmail) =>{
-    return employee.findOne({employeeEmail})
+const findByEmail = (email) =>{
+    return employee.findOne({email})
 }
 
 const deleteOne = (id) => {
     return employee.deleteOne({id})
 }
  
-const update = (id, inputemployee) =>{
-    return employee.findOneAndUpdate({_id: id},{...inputemployee});
+const update = (id, inputEmployee) =>{
+    return employee.findOneAndUpdate({_id: id},{...inputEmployee});
 }
  
 module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail}

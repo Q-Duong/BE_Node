@@ -9,7 +9,7 @@ const warehouseSchema = new mongoose.Schema({
     },
     supplier: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "supplier",
+        ref: 'supplier'
     },
     soldQuantity: {
         type: Number,
@@ -18,6 +18,7 @@ const warehouseSchema = new mongoose.Schema({
     soldPrice: {
         type: Number,
         required: true,
+        
     },
     stockQuantity: {
         type: Number,

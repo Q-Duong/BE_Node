@@ -3,11 +3,11 @@ const abstractModel  = require("./AbstractModel");
 
 const brandSchema = new mongoose.Schema({
     ...abstractModel,
-    brandName: {
+    name: {
         type: String,
         required: true,
     },
-    brandImage: {
+    image: {
         type: String,
         required: true,
     },

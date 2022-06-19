@@ -1,7 +1,7 @@
 const importOrderDetails  = require("../models/ImportOrderDetailsModel");
 
-const create = ({productSupplierId,productQuantity,productPrice})=>{
-   return importOrderDetails.create({productSupplierId, productQuantity, productPrice});
+const create = ({productId,quantity,price})=>{
+   return importOrderDetails.create({product:productId, productQuantity: quantity, productPrice: price});
 }
 
 const findAll = () => {
