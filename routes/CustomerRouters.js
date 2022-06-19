@@ -66,7 +66,7 @@ router
             res.status(200).json(customer);
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'});
+            res.status(400).json({message: err});
         })
     })
     .put('/:id', (req,res)=>{        

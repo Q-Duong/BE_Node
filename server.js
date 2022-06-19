@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const router = require('./routes/index')
 const app = express()
-const port  = process.send.PORT | 3001
+const port  = process.env.PORT | 3001
 
 mongoose.connect(
     process.env.MONGO_URI,

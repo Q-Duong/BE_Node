@@ -17,7 +17,7 @@ const findbyId = (id) => {
 }
 
 const deleteOne = (id) => {
-    return product.deleteOne({id})
+    return product.findOneAndDelete({_id: id})
 }
 
 const update = (id, inputProduct) =>{

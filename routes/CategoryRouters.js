@@ -1,12 +1,13 @@
 const {Router} = require('express');
+const { verifyToken } = require('../middlewares/auth');
+const { uploadFile } = require('../middlewares/uploadFile');
 const category = require('../models/CategoryModel');
 const categoryService = require('../services/CategoryService');
 const router = Router({ mergeParams: true })
 
 router
-    .post('/', (req,res)=>{
-            
-        categoryService.create(req.body)
+    .post('/', uploadFile, (req,res)=>{
+        categoryService.create({...req.body,categoryImage:req.file.filename})
             .then(category => {
                 res.status(201).json(category);
             })
@@ -30,7 +31,7 @@ router
             res.status(200).json(category);
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'});
+            res.status(400).json({message: err});
         })
     })
     .put('/:id', (req,res)=>{
@@ -39,7 +40,7 @@ router
             res.status(200).json(category)
         })
         .catch(err => {
-            res.status(400).json({message: 'gui lai request'})
+            res.status(400).json({message: err})
         })
     })
   

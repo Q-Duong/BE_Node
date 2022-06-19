@@ -13,7 +13,7 @@ const findbyName = (name) => {
 }
 
 const deleteOne = (id) => {
-    return supplier.deleteOne({id})
+    return supplier.findOneAndDelete({_id: id})
 }
 
 const update = (id, inputSupplier) =>{
