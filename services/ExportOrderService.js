@@ -1,3 +1,4 @@
+const { populate } = require("../models/ExportOrderModel");
 const exportOrder  = require("../models/ExportOrderModel");
 
 const create = (inputExportOrder)=>{
@@ -6,6 +7,14 @@ const create = (inputExportOrder)=>{
 
 const findAll = () => {
     return exportOrder.find({})
+    .populate({
+        path: 'employee',
+        select: 'name'
+    })
+    .populate({
+        path: 'details',
+        populate: {path: 'product', select: 'name unit'},
+    })
 }
 
 const deleteOne = (id) => {

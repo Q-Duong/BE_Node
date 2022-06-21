@@ -7,9 +7,17 @@ const exportOrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    shipAddress: {
+        type: String,
+        required: true
+    },
+    shippedDate: {
+        type: Date
+    },
     status: {
         type: String,
-        enum: ['New','Paid','Cancle']
+        enum: ['New','Paid','Cancle'],
+        default: "New"
     },
     employee: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,6 +27,10 @@ const exportOrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "customer"
     },
+    details: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'exportOrderDetails'
+    }]
 });
 
 const exportOrder = mongoose.model("exportOrder", exportOrderSchema);
