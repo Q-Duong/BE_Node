@@ -1,16 +1,21 @@
 const mongoose = require("mongoose");
-const exportOrder = require("./ExportOrder");
 const abstractModel  = require("./AbstractModel");
 
 const paymentSchema = new mongoose.Schema({
     ...abstractModel,
     type: {
         type: String,
-        enum: ['New','Success','Fail','Return']
+        enum: ['InPerson', 'MoMo'],
+        default: 'InPerson'
     },
-    momo: {
+    status: {
+        type: String,
+        enum: ['New','Success','Fail','Return'],
+        default: 'New'
+    },
+    momoId: {
         type: Number,
-        required: true,
+        default: -1
     },
     exportOrder: {
         type: mongoose.Schema.Types.ObjectId,

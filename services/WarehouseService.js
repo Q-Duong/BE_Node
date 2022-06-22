@@ -23,4 +23,7 @@ const update = (id, inputwarehouse) =>{
     return warehouse.findOneAndUpdate({_id: id},{...inputwarehouse}, {new:true});
 }
 
-module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID }
+const updateQuantity = ({id, quantity}) => {
+    return warehouse.findOneAndUpdate({_id: id}, { $inc: {soldQuantity: quantity, stockQuantity: -quantity }});
+}
+module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID, updateQuantity }
