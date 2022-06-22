@@ -17,7 +17,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputCategory) =>{
-    return category.findOneAndUpdate({_id: id},{...inputCategory});
+    return category.findOneAndUpdate({_id: id},{...inputCategory}, {new:true});
 }
 
 module.exports = {create , findAll, findbyName, deleteOne, update }

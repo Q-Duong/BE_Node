@@ -1,11 +1,11 @@
 const supplier  = require("../models/SupplierModel");
 
 const create = (inputSupplier)=>{
-   return supplier.create(inputSupplier);
+   return supplier.populate(inputSupplier, {path: 'products'});
 }
 
 const findAll = () => {
-    return supplier.find({})
+    return supplier.find({}).populate('products')
 }
 
 const findbyName = (name) => {
@@ -17,7 +17,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputSupplier) =>{
-    return supplier.findOneAndUpdate({_id: id},{...inputSupplier});
+    return supplier.findOneAndUpdate({_id: id},{...inputSupplier}, {new:true});
 }
 
 const findbyId = (id) => {

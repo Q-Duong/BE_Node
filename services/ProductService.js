@@ -1,7 +1,8 @@
 const product  = require("../models/ProductModel");
 
-const create = (inputProduct)=>{
-   return product.create(inputProduct);
+const create = async (inputProduct)=>{
+       return product
+        .populate(inputProduct, [{path: 'brand'},{path: 'category'}])
 }
 
 const findAll = () => {
@@ -21,7 +22,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputProduct) =>{
-    return product.findOneAndUpdate({_id: id},{...inputProduct});
+    return product.findOneAndUpdate({_id: id},{...inputProduct}, {new:true});
 }
 
 

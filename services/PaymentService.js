@@ -9,7 +9,7 @@ const findAll = () => {
 }
 
 const update = (id, inputpayment) =>{
-    return payment.findOneAndUpdate({_id: id},{...inputpayment});
+    return payment.findOneAndUpdate({_id: id},{...inputpayment}, {new:true});
 }
 
 module.exports = {create , findAll, update }
