@@ -24,5 +24,9 @@ const update = (id, inputProduct) =>{
     return product.findOneAndUpdate({_id: id},{...inputProduct});
 }
 
+const findBySearchTerm = (searchTerm) => {
+    return product.find({name: `/${searchTerm}/`}).populate('brand').populate('category')
+}
 
-module.exports = {create , findAll, findbyName, deleteOne, update , findbyId}
+
+module.exports = {create , findAll, findbyName, deleteOne, update , findbyId, findBySearchTerm }

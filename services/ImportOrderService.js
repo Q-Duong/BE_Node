@@ -6,6 +6,10 @@ const create = (inputImportOrder)=>{
 
 const findAll = () => {
     return importOrder.find({})
+    .populate({
+        path: 'details',
+        populate: {path: 'product', select: 'name unit'},
+    })
 }
 
 const deleteOne = (id) => {

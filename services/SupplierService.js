@@ -1,11 +1,19 @@
 const supplier  = require("../models/SupplierModel");
 
-const create = (inputSupplier)=>{
-   return supplier.create(inputSupplier);
+const create = async (inputSupplier)=>{
+    try {
+        const createdSupplier = await supplier.create(inputSupplier)
+        if(createdSupplier)
+            return supplier.populate(inputSupplier, {path: 'products'});
+        else 
+            return Promise.reject('Nhập nhà cung cấp không thành công')
+    } catch (error) {
+        return Promise.reject(error.toString())
+    }
 }
 
 const findAll = () => {
-    return supplier.find({})
+    return supplier.find({}).populate('products')
 }
 
 const findbyName = (name) => {
@@ -17,7 +25,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputSupplier) =>{
-    return supplier.findOneAndUpdate({_id: id},{...inputSupplier});
+    return supplier.findOneAndUpdate({_id: id},{...inputSupplier}, {new: true}).populate('products');
 }
 
 const findbyId = (id) => {
