@@ -40,7 +40,6 @@ const upload = multer({
 
 const uploadFile = (req,res,next)=>{
     upload(req,res , (err)=>{
-        console.log(err)
         if(err instanceof multer.MulterError){
             res.status(500).josn({message:err})
         }

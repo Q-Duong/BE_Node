@@ -7,7 +7,7 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', uploadFile, (req,res)=>{
-        categoryService.create({...req.body,categoryImage:req.file.filename})
+        categoryService.create({...req.body,image:req.file.filename})
             .then(category => {
                 res.status(201).json(category);
             })
@@ -34,8 +34,8 @@ router
             res.status(400).json({message: err});
         })
     })
-    .put('/:id', (req,res)=>{
-        categoryService.update(req.params.id, req.body)
+    .put('/:id',uploadFile, (req,res)=>{
+        categoryService.update(req.params.id, {...req.body,image:req.file.filename})
         .then(category =>{
             res.status(200).json(category)
         })

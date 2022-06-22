@@ -17,7 +17,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputimportOrderDetails) =>{
-    return importOrderDetails.findOneAndUpdate({_id: id},{...inputimportOrderDetails});
+    return importOrderDetails.findOneAndUpdate({_id: id},{...inputimportOrderDetails}, {new:true});
 }
 
 module.exports = {create , findAll, findbyName, deleteOne, update }

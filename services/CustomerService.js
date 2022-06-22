@@ -21,7 +21,7 @@ const deleteOne = (id) => {
 }
  
 const update = (id, inputCustomer) =>{
-    return customer.findOneAndUpdate({_id: id},{...inputCustomer});
+    return customer.findOneAndUpdate({_id: id},{...inputCustomer}, {new:true});
 }
  
 module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail}

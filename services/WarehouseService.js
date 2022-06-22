@@ -20,7 +20,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputwarehouse) =>{
-    return warehouse.findOneAndUpdate({_id: id},{...inputwarehouse});
+    return warehouse.findOneAndUpdate({_id: id},{...inputwarehouse}, {new:true});
 }
 
 const updateQuantity = ({id, quantity}) => {

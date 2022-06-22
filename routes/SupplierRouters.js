@@ -4,13 +4,13 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', (req,res)=>{
+        console.log(req.body)
         supplierService.create(req.body)
             .then(supplier => {
                 res.status(201).json(supplier);
             })
             .catch(err => {
-                console.log(err)
-                res.status(400).json({message: err});
+                res.status(400).json({message: err.toString()});
             })
     })
     .get('/', (req,res)=>{

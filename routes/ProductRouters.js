@@ -7,11 +7,13 @@ const { uploadFile } = require('../middlewares/uploadFile');
 
 router
     .post('/',uploadFile, (req,res)=>{
-        productService.create({...req.body, productImage: req.file.filename})
+        productService.create({...req.body, image: req.file.filename})
             .then(product => {
-                res.status(201).json(product);
+                console.log(product)
+                return res.status(201).json(product);
             })
             .catch(err => {
+                console.log(err)
                 res.status(400).json({message: err});
             })
     })
@@ -52,7 +54,7 @@ router
         })
     })
     .put('/:id', uploadFile, (req,res)=>{
-        productService.update({...req.body, productImage: req.file.filename})
+        productService.update({...req.body, image: req.file.filename})
         .then(product =>{
             res.status(200).json(product)
         })
