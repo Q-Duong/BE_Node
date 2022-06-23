@@ -19,7 +19,9 @@ router
     })
     .get('/', (req,res)=>{
         const searchTerm = req.query.searchTerm
-        if(searchTerm) 
+        if(searchTerm) {
+            
+        }
             
         productService.findAll(req.body)
             .then(product => {
