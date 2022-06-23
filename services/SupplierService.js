@@ -1,6 +1,5 @@
 const supplier  = require("../models/SupplierModel");
 
-<<<<<<< HEAD
 const create = async (inputSupplier)=>{
     try {
         const createdSupplier = await supplier.create(inputSupplier)
@@ -11,10 +10,6 @@ const create = async (inputSupplier)=>{
     } catch (error) {
         return Promise.reject(error.toString())
     }
-=======
-const create = (inputSupplier)=>{
-   return supplier.populate(inputSupplier, {path: 'products'});
->>>>>>> a6064f8fd0b2e216a7cb6d508d049141d7cd0228
 }
 
 const findAll = () => {
@@ -30,11 +25,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputSupplier) =>{
-<<<<<<< HEAD
     return supplier.findOneAndUpdate({_id: id},{...inputSupplier}, {new: true}).populate('products');
-=======
-    return supplier.findOneAndUpdate({_id: id},{...inputSupplier}, {new:true});
->>>>>>> a6064f8fd0b2e216a7cb6d508d049141d7cd0228
 }
 
 const findbyId = (id) => {
