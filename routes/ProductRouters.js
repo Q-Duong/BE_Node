@@ -20,16 +20,23 @@ router
     .get('/', (req,res)=>{
         const searchTerm = req.query.searchTerm
         if(searchTerm) {
-            
-        }
-            
-        productService.findAll(req.body)
+            productService.findBySearchTerm(searchTerm)
             .then(product => {
                 res.status(200).json(product);
             })
             .catch(err => {
                 res.status(400).json({message: err});
             })
+        }
+        else {
+            productService.findAll(req.body)
+            .then(product => {
+                res.status(200).json(product);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+        }
     })
     .get('/supplier/:id', (req,res) => {
         const supplierId = req.params.id
@@ -56,7 +63,7 @@ router
         })
     })
     .put('/:id', uploadFile, (req,res)=>{
-        productService.update({...req.body, image: req.file.filename})
+        productService.update(req.params.id,{...req.body, image: req.file.filename})
         .then(product =>{
             res.status(200).json(product)
         })

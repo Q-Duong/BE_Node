@@ -22,13 +22,27 @@ router
             })
     })
     .get('/', (req,res)=>{
-        warehouseService.findAll()
+        const searchTerm = req.query.searchTerm
+        console.log(searchTerm)
+        if(searchTerm) {
+            warehouseService.findBySearchTerm(searchTerm)
             .then(warehouses => {
                 res.status(200).json(warehouses);
             })
             .catch(err => {
+                console.log(err)
                 res.status(400).json({message: err});
             })
+        }
+        else {
+            warehouseService.findAll()
+                .then(warehouses => {
+                    res.status(200).json(warehouses);
+                })
+                .catch(err => {
+                    res.status(400).json({message: err});
+                })
+        }
     })
     .get('/:id', (req,res)=>{
         warehouseService.findbyID(req.params.id)

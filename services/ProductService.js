@@ -1,8 +1,16 @@
 const product  = require("../models/ProductModel");
 
 const create = async (inputProduct)=>{
-       return product
-        .populate(inputProduct, [{path: 'brand'},{path: 'category'}])
+    try {
+        const createdProduct = await product.create(inputProduct)
+        if(createdProduct)
+            return product
+            .populate(inputProduct, [{path: 'brand'},{path: 'category'}]);
+        else 
+            return Promise.reject('thêm sản phẩm không thành công')
+    } catch (error) {
+        return Promise.reject(error.toString())
+    }
 }
 
 const findAll = () => {
@@ -22,7 +30,7 @@ const deleteOne = (id) => {
 }
 
 const update = (id, inputProduct) =>{
-    return product.findOneAndUpdate({_id: id},{...inputProduct}, {new:true});
+    return product.findOneAndUpdate({_id: id},{...inputProduct}, {new:true}).populate('brand').populate('category');
 }
 
 const findBySearchTerm = (searchTerm) => {
