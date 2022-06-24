@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
     },
     expireUnit: {
         type: String,
-        enum: ['day', 'month', 'year']
+        enum: ['Ngày', 'Tháng', 'Năm']
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
