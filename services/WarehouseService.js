@@ -26,4 +26,26 @@ const update = (id, inputwarehouse) =>{
 const updateQuantity = ({id, quantity}) => {
     return warehouse.findOneAndUpdate({_id: id}, { $inc: {soldQuantity: quantity, stockQuantity: -quantity }});
 }
-module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID, updateQuantity }
+
+const findBySearchTerm = (searchTerm) => {
+    return warehouse.aggregate([
+        {
+            $lookup:{
+                from: 'products',
+                localField: 'product',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: {path:'$product'}
+        },
+        {
+            $match:{
+                'product.name': {$regex: `.*${searchTerm}.*`}
+            }
+        }
+    ])
+}
+
+module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm }
