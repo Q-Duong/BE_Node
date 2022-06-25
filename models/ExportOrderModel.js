@@ -16,8 +16,8 @@ const exportOrderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['New','Paid','Cancle'],
-        default: "New"
+        enum: ['Đơn hàng mới/CTT','Đơn hàng mới/ĐTT','Đã thanh toán','Hủy','Đã Giao Hàng'],
+        default: "Đơn hàng mới"
     },
     employee: {
         type: mongoose.Schema.Types.ObjectId,
