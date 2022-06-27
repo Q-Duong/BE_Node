@@ -53,10 +53,8 @@ router
     })
     .get('/customer', verifyToken, (req, res) => {
         const customer = req.user
-        console.log(customer)
         exportOrderService.findByCustomerId(customer.id)
             .then(exportOrder => {
-                console.log(exportOrder)
                 res.status(200).json(exportOrder);
             })
             .catch(err => {
