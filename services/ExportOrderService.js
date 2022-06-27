@@ -17,6 +17,18 @@ const findAll = () => {
     })
 }
 
+const findByCustomerId = (customerId) => {
+    return exportOrder.find({customer: customerId})
+    .populate({
+        path: 'employee',
+        select: 'name'
+    })
+    .populate({
+        path: 'details',
+        populate: {path: 'product', select: 'name unit'},
+    })
+}
+
 const deleteOne = (id) => {
     return exportOrder.deleteOne({id})
 }
@@ -25,4 +37,4 @@ const update = (id, inputExportOrder) =>{
     return exportOrder.findOneAndUpdate({_id: id},{...inputExportOrder}, {new:true});
 }
 
-module.exports = {create , findAll, deleteOne, update }
+module.exports = {create , findAll, deleteOne, update, findByCustomerId }

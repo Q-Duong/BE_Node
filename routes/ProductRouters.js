@@ -9,7 +9,6 @@ router
     .post('/',uploadFile, (req,res)=>{
         productService.create({...req.body, image: req.file.filename})
             .then(product => {
-                console.log(product)
                 return res.status(201).json(product);
             })
             .catch(err => {
@@ -18,25 +17,14 @@ router
             })
     })
     .get('/', (req,res)=>{
-        const searchTerm = req.query.searchTerm
-        if(searchTerm) {
-            productService.findBySearchTerm(searchTerm)
-            .then(product => {
-                res.status(200).json(product);
-            })
-            .catch(err => {
-                res.status(400).json({message: err});
-            })
-        }
-        else {
             productService.findAll(req.body)
-            .then(product => {
-                res.status(200).json(product);
+            .then(products => {
+                res.status(200).json(products);
             })
             .catch(err => {
                 res.status(400).json({message: err});
             })
-        }
+        
     })
     .get('/supplier/:id', (req,res) => {
         const supplierId = req.params.id

@@ -47,7 +47,6 @@ router
                         return Promise.reject(400)
                 })
                 .then(result => {
-                    console.log(result[1])
                     const token = signToken(result[1])
                     return res.status(200).json({accessToken: token})
                 })

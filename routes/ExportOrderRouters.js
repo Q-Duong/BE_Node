@@ -4,6 +4,7 @@ const exportOrderDetailService = require('../services/ExportOrderDetailsService'
 const paymentService = require('../services/PaymentService');
 const warehouseService  = require('../services/WarehouseService')
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
+const {verifyToken} = require('../middlewares/auth')
 const router = Router({ mergeParams: true })
 
 router
@@ -50,15 +51,18 @@ router
                 res.status(400).json({message: err});
             })
     })
-    // .delete('/:id', (req,res)=>{
-    //     exportOrderService.deleteOne(req.params.id)
-    //     .then(exportOrder =>{
-    //         res.status(200).json(exportOrder);
-    //     })
-    //     .catch(err => {
-    //         res.status(400).json({message: 'gui lai request'});
-    //     })
-    // })
+    .get('/customer', verifyToken, (req, res) => {
+        const customer = req.user
+        exportOrderService.findByCustomerId(customer.id)
+            .then(exportOrder => {
+                res.status(200).json(exportOrder);
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(400).json({message: err});
+            })
+
+    })
     .patch('/:id', (req,res)=>{
         exportOrderService.update(req.params.id, req.body)
         .then(exportOrder =>{

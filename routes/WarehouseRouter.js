@@ -22,9 +22,8 @@ router
             })
     })
     .get('/', (req,res)=>{
-        const searchTerm = req.query.searchTerm
-        console.log(searchTerm)
-        if(searchTerm) {
+        const {searchTerm} = req.query
+        if(searchTerm && searchTerm !='undefined' && searchTerm !='null') {
             warehouseService.findBySearchTerm(searchTerm)
             .then(warehouses => {
                 res.status(200).json(warehouses);

@@ -28,6 +28,7 @@ const updateQuantity = ({id, quantity}) => {
 }
 
 const findBySearchTerm = (searchTerm) => {
+    searchTerm = searchTerm.trim()
     return warehouse.aggregate([
         {
             $lookup:{
@@ -42,7 +43,7 @@ const findBySearchTerm = (searchTerm) => {
         },
         {
             $match:{
-                'product.name': {$regex: `.*${searchTerm}.*`}
+                'product.name': {$regex: `.*${searchTerm}.*`, $options: 'si' }
             }
         }
     ])
