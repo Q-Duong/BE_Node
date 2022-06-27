@@ -16,7 +16,7 @@ const findbyID = (id) => {
     return warehouse.findById(id).populate('product').populate('supplier')
 }
 const deleteOne = (id) => {
-    return warehouse.deleteOne({id})
+    return warehouse.findOneAndDelete({_id: id})
 }
 
 const update = (id, inputwarehouse) =>{

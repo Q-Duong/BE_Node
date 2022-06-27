@@ -7,11 +7,11 @@ const router = Router({ mergeParams: true })
 router
     .post('/', (req,res)=>{
             
-        const {employeeName,employeePhone,employeeEmail,employeeRole,employeeActive,employeePassword} = req.body
+        const {name,phone,email,active,password} = req.body
         
-        if(employeePassword != undefined ){
-            const hashPassword = md5(employeePassword)
-            employeeService.findByEmail(employeeEmail)
+        if(password != undefined ){
+            const hashPassword = md5(password)
+            employeeService.findByEmail(email)
                 .then(acc=>{
                     if(acc){
                         res.status(400).json({message:"Email is existing"})
@@ -20,7 +20,12 @@ router
                     return Promise.resolve(true)
                 })
                 .then(()=>{
-                        employeeService.create({employeeEmail : employeeEmail, employeePassword : hashPassword, employeeName : employeeName, employeePhone : employeePhone, employeeRole : employeeRole, employeeActive : employeeActive})
+                        employeeService.create({
+                            email : email,
+                            password : hashPassword, 
+                            name : name, 
+                            phone : phone, 
+                            active : active})
                         .then(createdAcc=>res.status(201).json(createdAcc))
                         .catch(err => res.status(500).json({message:err}))
                 })
