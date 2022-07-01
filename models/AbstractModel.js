@@ -7,6 +7,10 @@ const abstractModel = {
         type: Date,
         default: Date.now
     },
+    active: {
+        type: Boolean,
+        default: true
+    },
 }
 
 module.exports = abstractModel;

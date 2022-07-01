@@ -5,7 +5,7 @@ const create = (inputEmployee)=>{
 }
 
 const findAll = () => {
-    return employee.find({})
+    return employee.find({active:true})
 }
 
 const findbyName = (name) => {
@@ -17,7 +17,7 @@ const findByEmail = (email) =>{
 }
 
 const deleteOne = (id) => {
-    return employee.findOneAndDelete({_id: id})
+    return employee.findOneAndUpdate({_id: id},{active:false})
 }
  
 const update = (id, inputEmployee) =>{

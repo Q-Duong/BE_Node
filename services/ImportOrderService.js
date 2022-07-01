@@ -5,7 +5,7 @@ const create = (inputImportOrder)=>{
 }
 
 const findAll = () => {
-    return importOrder.find({})
+    return importOrder.find({active:true})
     .populate({
         path: 'details',
         populate: {path: 'product', select: 'name unit'},
@@ -13,7 +13,7 @@ const findAll = () => {
 }
 
 const deleteOne = (id) => {
-    return importOrder.deleteOne({id})
+    return importOrder.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputImportOrder) =>{

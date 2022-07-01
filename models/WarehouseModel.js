@@ -28,10 +28,6 @@ const warehouseSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    active: {
-        type: Boolean,
-        default: true,
-    },
     expireIn: {
         type: Date,
         required: true,

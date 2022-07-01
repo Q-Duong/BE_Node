@@ -43,6 +43,16 @@ router
                 })
         }
     })
+    .get('/category/:id', (req,res)=>{
+        console.log(req.params.id)
+        warehouseService.findbyCategoryID(req.params.id)
+        .then(warehouse => {
+            res.status(200).json(warehouse);
+        })
+        .catch(err => {
+            res.status(400).json({message: err});
+        })
+    })
     .get('/:id', (req,res)=>{
         warehouseService.findbyID(req.params.id)
             .then(warehouse => {
@@ -51,6 +61,27 @@ router
             .catch(err => {
                 res.status(400).json({message: err});
             })
+    })
+    .delete('/:id', (req,res)=>{
+        warehouseService.deleteOne(req.params.id)
+        .then(warehouse =>{
+            res.status(200).json(warehouse);
+        })
+        .catch(err => {
+            res.status(400).json({message: err});
+        })
+    })
+    .put('/:id', (req,res)=>{
+        console.log(req.body)
+        warehouseService.update(req.params.id, req.body)
+        .then(warehouse =>{
+            console.log(warehouse)
+            res.status(200).json(warehouse)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({message: err.toString()})
+        })
     })
 
 module.exports = {router}

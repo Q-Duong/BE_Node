@@ -14,7 +14,7 @@ const create = async (inputProduct)=>{
 }
 
 const findAll = () => {
-    return product.find({}).populate('brand').populate('category')
+    return product.find({active:true}).populate('brand').populate('category')
 }
 
 const findbyName = (name) => {
@@ -26,7 +26,7 @@ const findbyId = (id) => {
 }
 
 const deleteOne = (id) => {
-    return product.findOneAndDelete({_id: id})
+    return product.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputProduct) =>{

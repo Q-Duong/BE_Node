@@ -5,7 +5,7 @@ const create = ({productId,quantity,price})=>{
 }
 
 const findAll = () => {
-    return importOrderDetails.find({})
+    return importOrderDetails.find({active:true})
 }
 
 const findbyName = (importOrderDetailsId) => {
@@ -13,7 +13,7 @@ const findbyName = (importOrderDetailsId) => {
 }
 
 const deleteOne = (id) => {
-    return importOrderDetails.deleteOne({id})
+    return importOrderDetails.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputimportOrderDetails) =>{

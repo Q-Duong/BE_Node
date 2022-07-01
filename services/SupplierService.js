@@ -13,7 +13,7 @@ const create = async (inputSupplier)=>{
 }
 
 const findAll = () => {
-    return supplier.find({}).populate('products')
+    return supplier.find({active:true}).populate('products')
 }
 
 const findbyName = (name) => {
@@ -21,7 +21,7 @@ const findbyName = (name) => {
 }
 
 const deleteOne = (id) => {
-    return supplier.findOneAndDelete({_id: id})
+    return supplier.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputSupplier) =>{

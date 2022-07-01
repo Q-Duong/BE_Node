@@ -6,7 +6,7 @@ const create = (inputExportOrder)=>{
 }
 
 const findAll = () => {
-    return exportOrder.find({})
+    return exportOrder.find({active:true})
     .populate({
         path: 'employee',
         select: 'name'
@@ -30,7 +30,7 @@ const findByCustomerId = (customerId) => {
 }
 
 const deleteOne = (id) => {
-    return exportOrder.deleteOne({id})
+    return exportOrder.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputExportOrder) =>{

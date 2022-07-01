@@ -11,10 +11,6 @@ const roleSchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    active: {
-        type: Boolean,
-        default: true,
-    },
     permissions: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "permission",
