@@ -7,6 +7,7 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', uploadFile, (req,res)=>{
+        
         brandService.create({...req.body,image:req.file.filename})
             .then(brand => {
                 res.status(201).json(brand);
