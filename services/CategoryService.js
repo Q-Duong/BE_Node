@@ -5,7 +5,7 @@ const create = (inputCategory)=>{
 }
 
 const findAll = () => {
-    return category.find({})
+    return category.find({active:true})
 }
 
 const findbyName = (name) => {
@@ -13,7 +13,7 @@ const findbyName = (name) => {
 }
 
 const deleteOne = (id) => {
-    return category.findOneAndDelete({_id: id})
+    return category.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputCategory) =>{

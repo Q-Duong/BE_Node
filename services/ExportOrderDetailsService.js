@@ -5,11 +5,11 @@ const create = (inputExportOrderDetail)=>{
 }
 
 const findAll = () => {
-    return exportOrderDetails.find({})
+    return exportOrderDetails.find({active:true})
 }
 
 const deleteOne = (id) => {
-    return exportOrderDetails.deleteOne({_id: id})
+    return exportOrderDetails.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputexportOrderDetails) =>{

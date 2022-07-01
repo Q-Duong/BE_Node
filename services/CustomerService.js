@@ -5,7 +5,7 @@ const create = (inputCustomer)=>{
 }
 
 const findAll = () => {
-    return customer.find({})
+    return customer.find({active:true})
 }
 
 const findbyName = (name) => {
@@ -17,7 +17,7 @@ const findByEmail = (email) =>{
 }
  
 const deleteOne = (id) => {
-    return customer.findOneAndDelete({_id: id})
+    return customer.findOneAndUpdate({_id: id},{active:false})
 }
  
 const update = (id, inputCustomer) =>{

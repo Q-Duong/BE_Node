@@ -43,6 +43,16 @@ router
                 })
         }
     })
+    .get('/category/:id', (req,res)=>{
+        console.log(req.params.id)
+        warehouseService.findbyCategoryID(req.params.id)
+        .then(warehouse => {
+            res.status(200).json(warehouse);
+        })
+        .catch(err => {
+            res.status(400).json({message: err});
+        })
+    })
     .get('/:id', (req,res)=>{
         warehouseService.findbyID(req.params.id)
             .then(warehouse => {

@@ -3,13 +3,13 @@ const moment = require('moment')
 function caculateExpireTime(expireNumber, expireUnit) {
     let expireIn = 0;
     switch (expireUnit) {
-        case 'day': 
+        case 'Ngày': 
             expireIn = moment().add(expireNumber,'days');
             break;
-        case 'month':
+        case 'Tháng':
             expireIn = moment().add(expireNumber, 'months');
             break;
-        case 'year':
+        case 'Năm':
             expireIn = moment().add(expireNumber,'years');
             break;
         default: 

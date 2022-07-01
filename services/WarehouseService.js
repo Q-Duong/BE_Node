@@ -1,12 +1,13 @@
 const warehouse  = require("../models/warehouseModel");
 const { checkExpireDate } = require("../utils/Moment");
+const mongoose = require('mongoose')
 
 const create = ({productId, supplierId, stockQuantity, soldPrice, stockPrice, expireIn })=>{
    return warehouse.create({product: productId, supplier: supplierId, stockPrice, stockQuantity, soldPrice,expireIn})
 }
 
 const findAll = () => {
-    return warehouse.find({}).populate('product').populate('supplier')
+    return warehouse.find({active:true}).populate('product').populate('supplier')
 }
 const findByProductId = (productId) => {
     return warehouse.find({product: productId})
@@ -16,11 +17,11 @@ const findbyID = (id) => {
     return warehouse.findById(id).populate('product').populate('supplier')
 }
 const deleteOne = (id) => {
-    return warehouse.findOneAndDelete({_id: id})
+    return warehouse.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputwarehouse) =>{
-    return warehouse.findOneAndUpdate({_id: id},{...inputwarehouse}, {new:true});
+    return warehouse.findOneAndUpdate({_id: id},{...inputwarehouse}, {new:true}).populate('product');
 }
 
 const updateQuantity = ({id, quantity}) => {
@@ -48,5 +49,25 @@ const findBySearchTerm = (searchTerm) => {
         }
     ])
 }
+const findbyCategoryID = (categoryId) => {
+    return warehouse.aggregate([
+        {
+            $lookup:{
+                from: 'products',
+                localField: 'product',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: {path:'$product'}
+        },
+        {
+            $match:{
+                'product.category': mongoose.Types.ObjectId(categoryId)
+            }
+        }
+    ])
+}
 
-module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm }
+module.exports = {create , findAll, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID }

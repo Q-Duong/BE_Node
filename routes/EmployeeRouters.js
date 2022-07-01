@@ -1,7 +1,8 @@
 const {Router} = require('express');
 const employee = require('../models/EmployeeModel');
 const employeeService = require('../services/EmployeeService');
-const md5 = require('md5')
+const bcrypt = require('bcrypt');
+const { signToken } = require('../utils/SignToken');
 const router = Router({ mergeParams: true })
 
 router
@@ -10,29 +11,60 @@ router
         const {name,phone,email,active,password} = req.body
         
         if(password != undefined ){
-            const hashPassword = md5(password)
             employeeService.findByEmail(email)
                 .then(acc=>{
                     if(acc){
                         res.status(400).json({message:"Email is existing"})
                         return
                     }
-                    return Promise.resolve(true)
+                    return bcrypt.hash(password, 10)
                 })
-                .then(()=>{
-                        employeeService.create({
-                            email : email,
-                            password : hashPassword, 
-                            name : name, 
-                            phone : phone, 
-                            active : active})
-                        .then(createdAcc=>res.status(201).json(createdAcc))
-                        .catch(err => res.status(500).json({message:err}))
+                .then((result)=>{
+                    return employeeService.create({
+                        email : email,
+                        password : result, 
+                        name : name, 
+                        phone : phone, 
+                        active : active})
+                        .then(createdEmployee => {
+                            const token = signToken(createdEmployee);
+                            return res.status(201).json({accessToken: token})
+                        })
+                    .catch(err => res.status(500).json({message:err}))
                 })
                 .catch(err=>res.status(500).json(err))
         }
         else
             return res.status(500).json({message:"password is empty"})
+    })
+    .post("/login",(req,res,next) => {
+        const {email, password} = req.body;
+        if(email && password) {
+            employeeService.findByEmail(email)
+                .then(employee => {
+                   
+                    if(employee){
+                        return Promise.all([bcrypt.compare(password,employee.password), Promise.resolve(employee)])
+                    }
+                    else 
+                        return Promise.reject(400)
+                })
+                .then(result => {
+                    if(result[0]) {
+                        const token = signToken(result[1])
+                        return res.status(200).json({accessToken: token})
+                    } else {
+                        return Promise.reject(400)
+                    }
+                })
+                .catch(err => {
+                    if(err === 400)
+                        return res.status(400).json({message: "Invalid Credentials"})
+                    return res.status(500).json(err)
+                }) 
+        } else {
+            res.status(400).json({message: "email and password are required"})
+        }
     })
     .get('/', (req,res)=>{
         

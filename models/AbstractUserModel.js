@@ -19,10 +19,7 @@ const abstractUserModel = {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: "role",
     // },
-    active: {
-        type: Boolean,
-        default: true,
-    },
+    
 }
 
 module.exports = abstractUserModel;

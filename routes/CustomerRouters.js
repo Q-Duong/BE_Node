@@ -47,8 +47,12 @@ router
                         return Promise.reject(400)
                 })
                 .then(result => {
-                    const token = signToken(result[1])
-                    return res.status(200).json({accessToken: token})
+                    if(result[0]) {
+                        const token = signToken(result[1])
+                        return res.status(200).json({accessToken: token})
+                    } else {
+                        return Promise.reject(400)
+                    }
                 })
                 .catch(err => {
                     if(err === 400)

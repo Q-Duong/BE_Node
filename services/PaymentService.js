@@ -5,7 +5,7 @@ const create = (inputPayment)=>{
 }
 
 const findAll = () => {
-    return payment.find({})
+    return payment.find({active:true})
 }
 
 const update = (id, inputpayment) =>{

@@ -5,7 +5,7 @@ const create = (inputBrand)=>{
 }
 
 const findAll = () => {
-    return brand.find({})
+    return brand.find({active:true})
 }
 
 const findbyName = (brandName) => {
@@ -13,7 +13,7 @@ const findbyName = (brandName) => {
 }
 
 const deleteOne = (id) => {
-    return brand.findOneAndDelete({_id: id})
+    return brand.findOneAndUpdate({_id: id},{active:false})
 }
 
 const update = (id, inputBrand) =>{
