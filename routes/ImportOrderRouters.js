@@ -44,9 +44,9 @@ router
             
         Promise.all([promiseCreateOrder, promiseCreateDetailOrder, promiseCreateOrUpdateWarehouses])
             .then(results => {
-                results[0].importOrderDetail = results[1]
+                results[0].details = results[1]
                 results[0].save()
-                return res.status(201).json(results)
+                return res.status(201).json(results[0])
             })
             .catch(err => {
                 console.log(err)
