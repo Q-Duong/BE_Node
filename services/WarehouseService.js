@@ -30,6 +30,11 @@ const updateQuantity = ({id, quantity}) => {
 
 const findBySearchTerm = (searchTerm) => {
     searchTerm = searchTerm.trim()
+    const splitedWords = searchTerm.split(' ')
+    const queryObj = splitedWords.map(word => ({
+        'product.name': {$regex: `.*${word}.*`, $options: 'si' }
+    }))
+    queryObj.push({'product.name': {$regex: `.*${searchTerm}.*`, $options: 'si' }})
     return warehouse.aggregate([
         {
             $lookup:{
@@ -44,7 +49,7 @@ const findBySearchTerm = (searchTerm) => {
         },
         {
             $match:{
-                'product.name': {$regex: `.*${searchTerm}.*`, $options: 'si' }
+                $or: queryObj
             }
         }
     ])
