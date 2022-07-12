@@ -5,7 +5,7 @@ const employeeSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
-    },
+    }
 });
 
 const employee = mongoose.model("employee", employeeSchema);

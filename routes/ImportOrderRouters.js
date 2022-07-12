@@ -2,7 +2,7 @@ const {Router} = require('express');
 const importOrderService = require('../services/ImportOrderService');
 const importDetailOrderService = require('../services/ImportOrderDetailsService');
 const warehouseService = require('../services/WarehouseService');
-const {caculateExpireTime, checkExpireDate} = require('../utils/Moment')
+const {checkExpireDate} = require('../utils/Moment')
 const router = Router({ mergeParams: true })
 
 router
@@ -13,16 +13,17 @@ router
         const promiseCreateOrder = importOrderService.create(importOrderData)
         const promiseCreateDetailOrder = Promise.all(purchasedProducts.map(
             product => {
-                return importDetailOrderService.create({productId: product._id, quantity: product.stockQuantity, price:product.stockPrice})                
+                return importDetailOrderService.create({productId: product._id, productQuantity: product.stockQuantity, productPrice:product.stockPrice})                
             }))
         const promiseCreateOrUpdateWarehouses = Promise.all(purchasedProducts.map(
             async product => {
                 try {
-                    const expireIn = caculateExpireTime(product.expireNumber, product.expireUnit)
                     const warehouses = await warehouseService
                                 .findByProductId(product._id)
                     const foundWarehouse = warehouses.find(warehouse =>
-                        checkExpireDate(warehouse.expireIn, expireIn)
+                        checkExpireDate(warehouse.expireIn, product.expireIn)
+                        && warehouse.supplier === importOrderData.supplierId
+                        && warehouse.stockPrice === product.stockPrice
                         )
                     if(foundWarehouse) {
                         foundWarehouse.stockQuantity += product.stockQuantity
@@ -33,9 +34,11 @@ router
                             productId: product._id, 
                             supplierId: importOrderData.supplierId, 
                             stockQuantity: product.stockQuantity, 
-                            soldPrice: product.soldPrice,
                             stockPrice: product.stockPrice,
-                            expireIn })
+                            expireIn: product.expireIn,
+                            manufacturingDate: product.manufacturingDate,
+                            active: false
+                        })
                     }
                 } catch (error) {
                     return Promise.reject(error)

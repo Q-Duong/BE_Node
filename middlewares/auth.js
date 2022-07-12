@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const permission = require("../models/PermissionModel");
 const config = process.env;
 
 function verifyToken(req,res,next) {
@@ -14,4 +15,24 @@ function verifyToken(req,res,next) {
     }
 }
 
-module.exports = {verifyToken}
+function verifyByPermission(permissions) {
+    return (req,res,next) => {
+        const checkPermission = req.user.permissions.some(userPermission => 
+            permissions.includes(userPermission)    
+        )
+        if(!checkPermission)
+            return res.status(401).json('You dont have permission')
+        next()
+    }
+}
+
+function verifyByRole(roles){
+    return (req,res,next) => {
+        console.log(req.user)
+        if(!roles.includes(req.user.role.title))
+            return res.status(401).json('You dont have permission')
+        next()
+    }
+}
+
+module.exports = {verifyToken, verifyByPermission, verifyByRole}

@@ -12,9 +12,7 @@ mongoose.connect(
 )
 const db = mongoose.connection
 db.on("err",console.error.bind(console,"connection error : "))
-db.once("open",()=>{
-   console.log("connected to MongoDB")
-})
+db.once("open",()=>{})
 
 app.use(express.json());
 app.use(cors({

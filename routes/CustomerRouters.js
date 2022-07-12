@@ -6,9 +6,9 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', (req,res)=>{
-        const {name,email,password} = req.body
-        if(email && name && password){
-            customerService.findByEmail(email)
+        const {name,email,phone, password} = req.body
+        if(phone && email && name && password){
+            customerService.findByPhone(phone)
                     .then(acc=>{
                         if(acc){
                             return Promise.reject(409)
@@ -33,12 +33,12 @@ router
                     })
         }
         else
-            return res.status(400).json({message:"email, name, password are empty"})
+            return res.status(400).json({message:"email, name, phone and password are empty"})
     })
-    .post("/login",(req,res,next) => {
-        const {email, password} = req.body;
-        if(email && password) {
-            customerService.findByEmail(email)
+    .post("/login",(req,res) => {
+        const {phone, password} = req.body;
+        if(phone && password) {
+            customerService.findByPhone(phone)
                 .then(customer => {
                     if(customer){
                         return Promise.all([bcrypt.compare(password,customer.password), Promise.resolve(customer)])
@@ -60,7 +60,7 @@ router
                     return res.status(500).json(err)
                 }) 
         } else {
-            res.status(400).json({message: "email and password are required"})
+            res.status(400).json({message: "phone and password are required"})
         }
     })
     .delete('/:id', (req,res)=>{

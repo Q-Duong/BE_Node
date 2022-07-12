@@ -1,4 +1,5 @@
 const {Router} = require('express');
+const { checkActiveProduct } = require('../middlewares/checkActiveProduct');
 const warehouseService= require('../services/WarehouseService');
 const router = Router({ mergeParams: true })
 
@@ -43,6 +44,15 @@ router
                 })
         }
     })
+    .get('/admin', (req,res)=>{
+        warehouseService.findAllWithoutActive()
+            .then(warehouses => {
+                res.status(200).json(warehouses);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
     .get('/category/:id', (req,res)=>{
         console.log(req.params.id)
         warehouseService.findbyCategoryID(req.params.id)
@@ -71,17 +81,17 @@ router
             res.status(400).json({message: err});
         })
     })
-    .put('/:id', (req,res)=>{
-        console.log(req.body)
+    .put('/:id',checkActiveProduct, (req,res)=>{
+        if(req.body.soldPrice <= 0 && req.body.active === 'true')
+            return res.status(400).json({message: 'giá bán phải lớn hơn 0'})
         warehouseService.update(req.params.id, req.body)
-        .then(warehouse =>{
-            console.log(warehouse)
-            res.status(200).json(warehouse)
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({message: err.toString()})
-        })
+            .then(warehouse =>{
+                res.status(200).json(warehouse)
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({message: err.toString()})
+            })
     })
 
 module.exports = {router}

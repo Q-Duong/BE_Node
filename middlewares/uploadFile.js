@@ -1,10 +1,11 @@
 const cloudinary = require('cloudinary').v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
 cloudinary.config({
     cloud_name: 'anhtuanpham1507',
     api_key :'527374515711284',
     api_secret:'2kA3NFsnfQyHcPkLoVjBjCsMhCo'
 })
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer')
 const path = require('path');
 
@@ -41,7 +42,7 @@ const upload = multer({
 const uploadFile = (req,res,next)=>{
     upload(req,res , (err)=>{
         if(err instanceof multer.MulterError){
-            res.status(500).josn({message:err})
+            res.status(500).json({message:err})
         }
         else if(err){
             res.status(400).json({message:err})

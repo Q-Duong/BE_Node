@@ -1,5 +1,6 @@
 const {Router} = require('express');
-const { verifyToken } = require('../middlewares/auth');
+const { PERMISSION_TITLE_OBJ } = require('../enums/permissionEnum');
+const { verifyToken, verifyByRole, verifyByPermission } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
 const brand = require('../models/BrandModel');
 const brandService = require('../services/BrandService');
