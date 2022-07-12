@@ -5,14 +5,14 @@ const paymentService = require('../services/PaymentService');
 const warehouseService  = require('../services/WarehouseService')
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
 const {verifyToken} = require('../middlewares/auth')
+const {payMoMo} = require('../middlewares/payMoMo')
 const router = Router({ mergeParams: true })
 
 router
-    .post('/', checkWarehouseQuantity, (req,res)=>{
+    .post('/',verifyToken, checkWarehouseQuantity, (req,res)=>{
         const exportOrderData = req.body.exportOrder
         const purchaseProductDatas = req.body.purchaseProducts
-
-        const promiseCreateExportOrder = exportOrderService.create(exportOrderData)
+        const promiseCreateExportOrder = exportOrderService.create({...exportOrderData,customer: req.user.id})
         const promiseCreateExportOrderDetails = Promise.all(purchaseProductDatas.map(
             purchaseProductData => exportOrderDetailService.create({
                 product: purchaseProductData.productId,
@@ -26,7 +26,8 @@ router
                 quantity: purchaseProductData.quantity
             })
         ))
-        const promiseCreatePayment = paymentService.create()
+
+        const promiseCreatePayment =  paymentService.create()
 
         Promise.all([promiseCreateExportOrder, promiseCreateExportOrderDetails, promiseCreatePayment, promiseUpdateQuantityWarehouse])
             .then(results =>{
@@ -34,7 +35,12 @@ router
                 results[0].save()
                 results[2].exportOrder = results[0]
                 results[2].save()
-                return res.status(201).json(results)
+
+                if(exportOrderData.paymentMethod === 'MOMO') {
+                    req.exportOrder = results[0]
+                    return payMoMo(req,res)
+                }
+                return res.status(201).json({message: 'thanh toán thành công'})
             })
             .catch(err => {
                 console.log(err)

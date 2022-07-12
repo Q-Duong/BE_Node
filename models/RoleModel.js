@@ -17,6 +17,6 @@ const roleSchema = new mongoose.Schema({
     }]
 });
 
-const permission = mongoose.model("permission", permissionSchema);
+const role = mongoose.model("role", roleSchema);
 
-module.exports = permission;
+module.exports = role;

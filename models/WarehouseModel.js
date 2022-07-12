@@ -17,8 +17,7 @@ const warehouseSchema = new mongoose.Schema({
     },
     soldPrice: {
         type: Number,
-        required: true,
-        
+        default: 0        
     },
     stockQuantity: {
         type: Number,
@@ -26,11 +25,14 @@ const warehouseSchema = new mongoose.Schema({
     },
     stockPrice: {
         type: Number,
-        required: true,
+        default: 0
+    },
+    manufacturingDate: {
+        type: Date,
+        default: Date.now
     },
     expireIn: {
         type: Date,
-        required: true,
         default: Date.now,
     }
 });

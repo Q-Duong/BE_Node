@@ -1,7 +1,16 @@
 const employee  = require("../models/EmployeeModel");
 
-const create = (inputEmployee)=>{
-   return employee.create(inputEmployee);
+const create = async (inputEmployee)=>{
+    try {
+        const createdEmployee = await employee.create(inputEmployee)
+        if(createdEmployee)
+            return employee
+            .populate(inputEmployee, [{path: 'role'}]);
+        else 
+            return Promise.reject('thêm nhân viên không thành công')
+    } catch (error) {
+        return Promise.reject(error.toString())
+    }
 }
 
 const findAll = () => {

@@ -5,7 +5,6 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', (req,res)=>{
-        
         paymentService.create(req.body)
             .then(payment => {
                 res.status(201).json(payment);

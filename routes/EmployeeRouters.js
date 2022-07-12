@@ -1,5 +1,4 @@
 const {Router} = require('express');
-const employee = require('../models/EmployeeModel');
 const employeeService = require('../services/EmployeeService');
 const bcrypt = require('bcrypt');
 const { signToken } = require('../utils/SignToken');
@@ -7,8 +6,7 @@ const router = Router({ mergeParams: true })
 
 router
     .post('/', (req,res)=>{
-            
-        const {name,phone,email,active,password} = req.body
+        const {name,phone,email,active,password,role} = req.body
         
         if(password != undefined ){
             employeeService.findByEmail(email)
@@ -21,11 +19,13 @@ router
                 })
                 .then((result)=>{
                     return employeeService.create({
-                        email : email,
+                        email,
+                        name, 
+                        phone, 
+                        active,
+                        role,
                         password : result, 
-                        name : name, 
-                        phone : phone, 
-                        active : active})
+                    })
                         .then(createdEmployee => {
                             const token = signToken(createdEmployee);
                             return res.status(201).json({accessToken: token})
