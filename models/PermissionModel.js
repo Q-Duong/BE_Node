@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {PERMISSION_TITLE_ENUM} = require('../enums/permissionEnum')
+const {PERMISSION_TITLE_ENUM} = require('../constraint/permissionEnum')
 const abstractModel  = require("./AbstractModel");
 
 const permissionSchema = new mongoose.Schema({

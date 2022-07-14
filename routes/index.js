@@ -12,7 +12,7 @@ const {router:supplierRouter} = require('./SupplierRouters')
 const {router:warehouseRouter} = require('./WarehouseRouter')
 const {router:permissionRouter} = require('./PermissionRouters')
 const {router:roleRouter} = require('./RoleRouters')
-const {router:collectionRouter} = require('./CollectionRouter')
+const {router:protectedRoute} = require('./ProtectedRouter')
 
 
 router.use('/brand',brandRouter)
@@ -26,6 +26,6 @@ router.use('/supplier',supplierRouter)
 router.use('/warehouse',warehouseRouter)
 router.use('/permission', permissionRouter)
 router.use('/role', roleRouter)
-router.use('/collection', collectionRouter)
+router.use('/protected', protectedRoute)
 
 module.exports = router

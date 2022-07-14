@@ -28,7 +28,6 @@ function verifyByPermission(permissions) {
 
 function verifyByRole(roles){
     return (req,res,next) => {
-        console.log(req.user)
         if(!roles.includes(req.user.role.title))
             return res.status(401).json('You dont have permission')
         next()

@@ -5,7 +5,16 @@ const create = async (inputEmployee)=>{
         const createdEmployee = await employee.create(inputEmployee)
         if(createdEmployee)
             return employee
-            .populate(inputEmployee, [{path: 'role'}]);
+            .populate(inputEmployee, 
+                {
+                    path: 'role',
+                    select: 'title _id',
+                    populate: {
+                        path: 'permissions',
+                        select: 'title _id'
+                    }
+                }
+            );
         else 
             return Promise.reject('thêm nhân viên không thành công')
     } catch (error) {
@@ -22,7 +31,14 @@ const findbyName = (name) => {
 }
 
 const findByEmail = (email) =>{
-    return employee.findOne({email})
+    return employee.findOne({email}).populate({
+        path: 'role',
+        select: 'title _id',
+        populate: {
+            path: 'permissions',
+            select: 'title _id'
+        }
+    })
 }
 
 const deleteOne = (id) => {

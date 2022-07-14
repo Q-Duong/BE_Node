@@ -37,7 +37,7 @@ router
         else
             return res.status(500).json({message:"password is empty"})
     })
-    .post("/login",(req,res,next) => {
+    .post("/login",(req,res) => {
         const {email, password} = req.body;
         if(email && password) {
             employeeService.findByEmail(email)
@@ -58,6 +58,7 @@ router
                     }
                 })
                 .catch(err => {
+                    console.log(err)
                     if(err === 400)
                         return res.status(400).json({message: "Invalid Credentials"})
                     return res.status(500).json(err)
