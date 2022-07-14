@@ -2,6 +2,8 @@ const {Router} = require('express');
 const customerService = require('../services/CustomerService');
 const bcrypt = require('bcrypt');
 const { signToken } = require('../utils/SignToken');
+const nodemailer = require('nodemailer');
+const { verifyToken } = require('../middlewares/auth');
 const router = Router({ mergeParams: true })
 
 router
@@ -63,6 +65,37 @@ router
             res.status(400).json({message: "phone and password are required"})
         }
     })
+    .post('/forgotpassword', async (req,res) => {
+         try{
+            const {fromEmail} = req.body
+            const foundCustomer = await customerService.findByEmail(fromEmail)
+            if(!foundCustomer)
+                return res.status(400).json({message: 'email is invalid'})
+            const token = signToken(foundCustomer)
+
+            let transporter = nodemailer.createTransport({
+              host: "smtp.gmail.com",
+              port: 587,
+              secure: false, // true for 465, false for other ports
+              auth: {
+                user: 'phamanhtuan9a531@gmail.com', // generated ethereal user
+                pass: 'icbbcivwahkzxhak'
+              },
+            });
+          
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+              from: '"Lão tôn 👻" <phamanhtuan9a531@gmail.com>', // sender address
+              to: fromEmail, // list of receivers
+              subject: "Forgot password", // Subject line
+              html: `<h1>If you wanna to create new password please <a href="http://127.0.0.1:3000/updatepassword?token=${token}">click here</a>`, // html body
+            });
+            res.status(200).json({message: `Vui long kiểm tra tài khoản gmail ${fromEmail} để thực hiện tạo mật khẩu mới`})
+            
+          } catch(err) {
+            res.status(500).json({message: err.toString()})
+          }
+    })
     .delete('/:id', (req,res)=>{
         customerService.deleteOne(req.params.id)
         .then(customer =>{
@@ -77,6 +110,16 @@ router
             .then(createdAcc=>res.status(200).json(createdAcc))
             .catch(err => res.status(500).json({message:err}))
     })
+    .patch('/password',verifyToken, async (req,res) => {
+        try {
+            const {newPassword} = req.body
+            const hashedPassword =  await bcrypt.hash(newPassword,10)
+            const updatedCustomer = await customerService.updatePassword(req.user.id, hashedPassword)
+            res.json({message: 'update password successfully'})
+        } catch (error) {
+            res.status(500).json({message: error.toString()})
+        }
+    })
     .get('/', (req,res)=>{
         customerService.findAll(req.body)
             .then(customers => {
@@ -85,6 +128,15 @@ router
             .catch(err => {
                 res.status(500).json({message: err});
             })
+    })
+    .get('/info', verifyToken,async (req,res) => {
+        try {
+            const foundCustomer =  await customerService.findByEmail(req.user.email)
+            delete foundCustomer['password']
+            res.status(200).json(foundCustomer)
+        } catch (error) {
+            res.status(500).json({message: error.toString()})
+        }  
     })
 
   

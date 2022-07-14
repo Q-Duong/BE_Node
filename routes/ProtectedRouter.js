@@ -3,7 +3,7 @@ const { verifyToken, verifyByRole } = require('../middlewares/auth');
 const router = Router({ mergeParams: true })
 const mongoose = require('mongoose');
 const translateCollectionName = require('../utils/translateCollectionName');
-
+const nodemailer = require('nodemailer')
 router
     .get('/linkroute',verifyToken,(req,res)=>{
         const userReadPermission = req.user.role.permissions

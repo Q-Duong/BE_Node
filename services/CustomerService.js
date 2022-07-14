@@ -27,5 +27,9 @@ const deleteOne = (id) => {
 const update = (id, inputCustomer) =>{
     return customer.findOneAndUpdate({_id: id},{...inputCustomer}, {new:true});
 }
+
+const updatePassword = (id,password) => {
+    return customer.findOneAndUpdate({_id: id},{password}, {new:true});
+}
  
-module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail, findByPhone}
+module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail, findByPhone, updatePassword}
