@@ -3,9 +3,9 @@ const crypto = require('crypto');
 
 async function payMoMo (req, res) {
     try {
-        var partnerCode = "MOMOUR2S20210830";
-        var accessKey = "zV8bQQqebfkOpXm8";
-        var secretkey = "URjMechix19xzhkqAP7Ev1Zhqyo5ZWEt";
+        var partnerCode = "MOMOKJ7O20220712";
+        var accessKey = "uyBDCk92cx69Iygt";
+        var secretkey = "lJLV7ECW8QbM3fNCVvgJPNLtY160g1D4";
         var requestId = req.exportOrder._id;
         var orderId = req.exportOrder._id;
         var orderInfo = "pay with MoMo";

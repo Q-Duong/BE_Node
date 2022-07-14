@@ -16,7 +16,7 @@ const findAllWithoutActive = () => {
         .sort({active: -1, product: 1})
 }
 const findByProductId = (productId) => {
-    return warehouse.find({product: productId})
+    return warehouse.find({product: productId,active: true})
 }
 
 const findByProductIdWithActive = (productId) => {
@@ -59,7 +59,8 @@ const findBySearchTerm = (searchTerm) => {
         },
         {
             $match:{
-                $or: queryObj
+                $or: queryObj,
+                active: true
             }
         }
     ])
@@ -79,7 +80,8 @@ const findbyCategoryID = (categoryId) => {
         },
         {
             $match:{
-                'product.category': mongoose.Types.ObjectId(categoryId)
+                'product.category': mongoose.Types.ObjectId(categoryId),
+                active: true
             }
         }
     ])

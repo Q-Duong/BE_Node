@@ -19,13 +19,9 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    expireNumber: {
-        type: Number,
-        default: 1
-    },
-    expireUnit: {
+    description: {
         type: String,
-        enum: ['Ngày', 'Tháng', 'Năm']
+        required: true,
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
