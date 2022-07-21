@@ -19,6 +19,10 @@ const findByProductId = (productId) => {
     return warehouse.find({product: productId,active: true})
 }
 
+const findItemOutOfStock = () => {
+    return warehouse.find({stockQuantity: {$lt: 10}}).populate('product')
+}
+
 const findByProductIdWithActive = (productId) => {
     return warehouse.find({product: productId, active: true})
 }
@@ -87,4 +91,4 @@ const findbyCategoryID = (categoryId) => {
     ])
 }
 
-module.exports = {create , findAll, findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }
+module.exports = {create , findAll, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }

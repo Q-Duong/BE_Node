@@ -11,6 +11,7 @@ const router = Router({ mergeParams: true })
 router
     .post('/',verifyToken, checkWarehouseQuantity, (req,res)=>{
         const exportOrderData = req.body.exportOrder
+        console.log('aaaa')
         const purchaseProductDatas = req.body.purchaseProducts
         const promiseCreateExportOrder = exportOrderService.create({...exportOrderData,customer: req.user.id})
         const promiseCreateExportOrderDetails = Promise.all(purchaseProductDatas.map(
@@ -39,8 +40,11 @@ router
                 if(exportOrderData.paymentMethod === 'MOMO') {
                     req.exportOrder = results[0]
                     return payMoMo(req,res)
-                }
-                return res.status(201).json({message: 'thanh toán thành công'})
+                } else 
+                    return Promise.resolve({message: 'thanh toán thành công'})
+            })
+            .then(result => {
+                return res.status(201).json(result)
             })
             .catch(err => {
                 console.log(err)

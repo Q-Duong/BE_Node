@@ -13,7 +13,7 @@ const {router:warehouseRouter} = require('./WarehouseRouter')
 const {router:permissionRouter} = require('./PermissionRouters')
 const {router:roleRouter} = require('./RoleRouters')
 const {router:protectedRoute} = require('./ProtectedRouter')
-
+const {router:notificationRoute} = require('./NotificationRouter')
 
 router.use('/brand',brandRouter)
 router.use('/category',categoryRouter)
@@ -27,5 +27,5 @@ router.use('/warehouse',warehouseRouter)
 router.use('/permission', permissionRouter)
 router.use('/role', roleRouter)
 router.use('/protected', protectedRoute)
-
+router.use('/notification', notificationRoute)
 module.exports = router

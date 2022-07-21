@@ -55,9 +55,9 @@ async function payMoMo (req, res) {
         //Send the request and get the response
         const requestMoMo = await axios(options)
     
-        return res.status(201).json({payUrl: requestMoMo.data.payUrl})
+        return Promise.resolve({payUrl: requestMoMo.data.payUrl})
     } catch (error) {
-        return res.status(500).json({message: error.toString()})
+        return Promise.reject({message: error.toString()})
     }
 }
 

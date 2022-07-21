@@ -39,6 +39,7 @@ router
     })
     .post("/login",(req,res) => {
         const {phone, password} = req.body;
+        console.log(phone, password)
         if(phone && password) {
             customerService.findByPhone(phone)
                 .then(customer => {
