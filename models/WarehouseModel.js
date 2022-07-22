@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2')
+const mongooseArregatePaginate = require('mongoose-aggregate-paginate-v2')
 const abstractModel  = require("./AbstractModel");
 
 const warehouseSchema = new mongoose.Schema({
@@ -36,6 +38,9 @@ const warehouseSchema = new mongoose.Schema({
         default: Date.now,
     }
 });
+
+warehouseSchema.plugin(mongoosePaginate)
+warehouseSchema.plugin(mongooseArregatePaginate)
 
 const warehouse = mongoose.model("warehouse", warehouseSchema);
 

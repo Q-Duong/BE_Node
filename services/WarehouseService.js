@@ -7,14 +7,14 @@ const create = ({productId, supplierId, stockQuantity, soldPrice, stockPrice, ex
 }
 
 const findAll = () => {
-    return warehouse.find({active:true}).sort({soldPirce: 1}).populate('product').populate('supplier')
+    return warehouse.find({active:true}).sort({soldPirce: -1}).populate('product').populate('supplier')
 }
 
-const findAllWithoutActive = () => {
-    return warehouse.find({})
-        .populate('product').populate('supplier')
-        .sort({active: -1, product: 1})
+const findAllWithoutActive = (filterOptions,paginationOption) => {
+    const aggregate = warehouse.aggregate(filterOptions)
+    return warehouse.aggregatePaginate(aggregate,{...paginationOption,sort:{active: -1, product: 1}})
 }
+
 const findByProductId = (productId) => {
     return warehouse.find({product: productId,active: true})
 }
@@ -91,4 +91,8 @@ const findbyCategoryID = (categoryId) => {
     ])
 }
 
-module.exports = {create , findAll, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }
+const findAndSortBySoldQuantity = (limit) => {
+    return warehouse.find({active: true}).sort({soldQuantity: -1}).limit(limit).populate('product')
+}
+
+module.exports = {create , findAll,findAndSortBySoldQuantity, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }

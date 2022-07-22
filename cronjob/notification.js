@@ -1,5 +1,5 @@
 const cron = require('node-cron')
-const checkCommingOutOfStockWarehouse = require('../utils/comingOutOfStockWarehouse')
+const checkCommingOutOfStockWarehouse = require('../utils/CheckComingOutOfStockWarehouse')
 
 const schedule = cron.schedule('0 1 * * *',async () => {
     console.log('run at 1:00 AM')
