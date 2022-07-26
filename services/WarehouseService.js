@@ -95,4 +95,8 @@ const findAndSortBySoldQuantity = (limit) => {
     return warehouse.find({active: true}).sort({soldQuantity: -1}).limit(limit).populate('product')
 }
 
-module.exports = {create , findAll,findAndSortBySoldQuantity, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }
+const findStatusDiscount = () => {
+    return warehouse.find({active:true},{status:'khuyến mãi'}).sort({soldPirce: -1}).populate('product')
+}
+
+module.exports = {create , findAll,findAndSortBySoldQuantity, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }
