@@ -11,7 +11,6 @@ const router = Router({ mergeParams: true })
 router
     .post('/',verifyToken, checkWarehouseQuantity, (req,res)=>{
         const exportOrderData = req.body.exportOrder
-        console.log('aaaa')
         const purchaseProductDatas = req.body.purchaseProducts
         const promiseCreateExportOrder = exportOrderService.create({...exportOrderData,customer: req.user.id})
         const promiseCreateExportOrderDetails = Promise.all(purchaseProductDatas.map(

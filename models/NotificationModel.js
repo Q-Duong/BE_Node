@@ -11,10 +11,13 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    type: {
+        type: String,
+        enum: ['OUT_OF_STOCK','EXPIRE']
+    },
     warehouse: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'warehouse',
-        unique: true
+        ref: 'warehouse'
     }
 })
 
