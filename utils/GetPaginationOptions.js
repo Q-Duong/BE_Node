@@ -1,7 +1,7 @@
 function getPaginationOptions(req) {
     const {reqPage, reqLimit} = req.query
-    const page = reqPage && page >= 0 ? Number(reqPage) : 1
-    const limit = reqLimit && limit >= 10 ? Number(reqLimit) : 10
+    const page = reqPage && reqPage >= 0 ? Number(reqPage) : 1
+    const limit = reqLimit && reqLimit >= 6 ? Number(reqLimit) : 3
     return { page, limit }
 }
 

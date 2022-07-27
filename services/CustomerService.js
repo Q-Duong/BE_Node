@@ -4,8 +4,8 @@ const create = (inputCustomer)=>{
    return customer.create(inputCustomer);
 }
 
-const findAll = () => {
-    return customer.find({active:true})
+const findAll = (paginationOption) => {
+    return customer.paginate({active:true},paginationOption)
 }
 
 const findbyName = (name) => {

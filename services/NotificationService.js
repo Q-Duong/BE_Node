@@ -12,8 +12,12 @@ const findById = (id) => {
     return notification.findById(id)
 }
 
-const findByWarehouseId = (warehouseId) => {
-    return notification.findOne({warehouse: warehouseId})
+const findByWarehouseOutOfStock = (warehouseId) => {
+    return notification.findOne({warehouse: warehouseId, type: "OUT_OF_STOCK"})
+}
+
+const findByWarehouseExpire = (warehouseId) => {
+    return notification.findOne({warehouse: warehouseId, type: "EXPIRE"})
 }
 
 const update = (id,inputNotification) => {
@@ -28,4 +32,4 @@ const deleteOne = (id) => {
     return notification.findOneAndUpdate({_id:id},{active:false},{new:true})
 }
 
-module.exports = {findByWarehouseId, findAll, findById, create, update, updateIsRead, deleteOne}
+module.exports = {findByWarehouseOutOfStock,findByWarehouseExpire, findAll, findById, create, update, updateIsRead, deleteOne}

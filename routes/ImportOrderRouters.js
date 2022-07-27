@@ -2,7 +2,8 @@ const {Router} = require('express');
 const importOrderService = require('../services/ImportOrderService');
 const importDetailOrderService = require('../services/ImportOrderDetailsService');
 const warehouseService = require('../services/WarehouseService');
-const {checkExpireDate} = require('../utils/Moment')
+const {checkExpireDate} = require('../utils/Moment');
+const getPaginationOptions = require('../utils/GetPaginationOptions');
 const router = Router({ mergeParams: true })
 
 router
@@ -57,7 +58,9 @@ router
             })
     })
     .get('/', (req,res)=>{
-        importOrderService.findAll(req.body)
+        const paginationOptions = getPaginationOptions(req)
+
+        importOrderService.findAll(paginationOptions)
             .then(importOrder => {
                 res.status(200).json(importOrder);
             })

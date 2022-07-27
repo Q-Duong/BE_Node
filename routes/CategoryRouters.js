@@ -3,6 +3,7 @@ const { verifyToken } = require('../middlewares/auth');
 const { uploadFile } = require('../middlewares/uploadFile');
 const category = require('../models/CategoryModel');
 const categoryService = require('../services/CategoryService');
+const getPaginationOptions = require('../utils/GetPaginationOptions')
 const router = Router({ mergeParams: true })
 
 router
@@ -16,8 +17,9 @@ router
             })
     })
     .get('/', (req,res)=>{
-        
-        categoryService.findAll(req.body)
+        const paginationOptions = getPaginationOptions(req)
+
+        categoryService.findAll(paginationOptions)
             .then(category => {
                 res.status(200).json(category);
             })

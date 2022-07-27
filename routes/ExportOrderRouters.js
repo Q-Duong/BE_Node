@@ -6,12 +6,13 @@ const warehouseService  = require('../services/WarehouseService')
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
 const {verifyToken} = require('../middlewares/auth')
 const {payMoMo} = require('../middlewares/payMoMo')
+const getPaginationOptions = require('../utils/GetPaginationOptions')
+
 const router = Router({ mergeParams: true })
 
 router
     .post('/',verifyToken, checkWarehouseQuantity, (req,res)=>{
         const exportOrderData = req.body.exportOrder
-        console.log('aaaa')
         const purchaseProductDatas = req.body.purchaseProducts
         const promiseCreateExportOrder = exportOrderService.create({...exportOrderData,customer: req.user.id})
         const promiseCreateExportOrderDetails = Promise.all(purchaseProductDatas.map(
@@ -52,7 +53,9 @@ router
             })
     })
     .get('/', (req,res)=>{
-        exportOrderService.findAll()
+        const paginationOptions = getPaginationOptions(req)
+
+        exportOrderService.findAll(paginationOptions)
             .then(exportOrder => {
                 res.status(200).json(exportOrder);
             })

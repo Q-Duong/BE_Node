@@ -2,6 +2,7 @@ const {Router} = require('express');
 const employeeService = require('../services/EmployeeService');
 const bcrypt = require('bcrypt');
 const { signToken } = require('../utils/SignToken');
+const getPaginationOptions = require('../utils/GetPaginationOptions');
 const router = Router({ mergeParams: true })
 
 router
@@ -68,8 +69,9 @@ router
         }
     })
     .get('/', (req,res)=>{
-        
-        employeeService.findAll(req.body)
+        const paginationOptions = getPaginationOptions(req)
+
+        employeeService.findAll(paginationOptions)
             .then(employee => {
                 res.status(200).json(employee);
             })

@@ -4,8 +4,8 @@ const create = (inputCategory)=>{
    return category.create(inputCategory);
 }
 
-const findAll = () => {
-    return category.find({active:true})
+const findAll = (paginationOption) => {
+    return category.paginate({active:true},paginationOption)
 }
 
 const findbyName = (name) => {

@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const supplierService = require('../services/SupplierService');
+const getPaginationOptions = require('../utils/GetPaginationOptions');
 const router = Router({ mergeParams: true })
 
 router
@@ -13,13 +14,23 @@ router
             })
     })
     .get('/', (req,res)=>{
-        
-        supplierService.findAll(req.body)
+        supplierService.findAll()
             .then(supplier => {
                 res.status(200).json(supplier);
             })
             .catch(err => {
                 res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req, res) => {
+        const paginationOptions = getPaginationOptions(req)
+        
+        supplierService.findAllPaginate(paginationOptions)
+            .then(supplier => {
+                res.status(200).json({...supplier});
+            })
+            .catch(err => {
+                res.status(400).json({ message: err });
             })
     })
     .delete('/:id', (req,res)=>{

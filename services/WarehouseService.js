@@ -1,5 +1,4 @@
 const warehouse  = require("../models/warehouseModel");
-const { checkExpireDate } = require("../utils/Moment");
 const mongoose = require('mongoose')
 
 const create = ({productId, supplierId, stockQuantity, soldPrice, stockPrice, expireIn,active })=>{
@@ -19,8 +18,15 @@ const findByProductId = (productId) => {
     return warehouse.find({product: productId,active: true})
 }
 
-const findItemOutOfStock = () => {
-    return warehouse.find({stockQuantity: {$lt: 10}}).populate('product')
+const findItemOutOfStock = (limit) => {
+    return warehouse.find({stockQuantity: {$lt: limit}}).populate('product')
+}
+
+const findItemCommingExpire = (fromDate,toDate) => {
+    return warehouse.find({expireIn: { 
+        $gte: fromDate,
+        $lte: toDate
+    }}).populate('product')
 }
 
 const findByProductIdWithActive = (productId) => {
@@ -99,4 +105,4 @@ const findStatusDiscount = () => {
     return warehouse.find({active:true},{status:'khuyến mãi'}).sort({soldPirce: -1}).populate('product')
 }
 
-module.exports = {create , findAll,findAndSortBySoldQuantity, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }
+module.exports = {create , findAll,findAndSortBySoldQuantity,findItemCommingExpire, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }

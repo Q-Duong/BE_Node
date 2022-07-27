@@ -22,8 +22,8 @@ const create = async (inputEmployee)=>{
     }
 }
 
-const findAll = () => {
-    return employee.find({active:true})
+const findAll = (paginationOption) => {
+    return employee.paginate({active:true},paginationOption)
 }
 
 const findbyName = (name) => {

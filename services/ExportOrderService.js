@@ -5,8 +5,8 @@ const create = (inputExportOrder)=>{
    return exportOrder.create(inputExportOrder);
 }
 
-const findAll = () => {
-    return exportOrder.find({active:true})
+const findAll = (paginationOption) => {
+    return exportOrder.paginate({active:true},paginationOption)
     .populate({
         path: 'employee',
         select: 'name'

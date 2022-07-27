@@ -13,8 +13,8 @@ const create = async (inputProduct)=>{
     }
 }
 
-const findAll = () => {
-    return product.find({active:true}).populate('brand').populate('category')
+const findAll = (paginationOption) => {
+    return product.paginate({active:true},...paginationOption).populate('brand').populate('category')
 }
 
 const findbyName = (name) => {

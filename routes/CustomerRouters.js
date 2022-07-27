@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { signToken } = require('../utils/SignToken');
 const nodemailer = require('nodemailer');
 const { verifyToken } = require('../middlewares/auth');
+const getPaginationOptions = require('../utils/GetPaginationOptions');
 const router = Router({ mergeParams: true })
 
 router
@@ -122,7 +123,9 @@ router
         }
     })
     .get('/', (req,res)=>{
-        customerService.findAll(req.body)
+        const paginationOptions = getPaginationOptions(req)
+
+        customerService.findAll(paginationOptions)
             .then(customers => {
                 res.status(200).json(customers);
             })

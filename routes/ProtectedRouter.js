@@ -22,8 +22,8 @@ router
             title: 'thống kê',
             heading: 'dashboard'
         })
-
-        return res.json(navbarNames)
+        console.log(Object.keys(mongoose.connections[0].collections))
+        return res.json(navbarNames.sort((a,b) => a.title.localeCompare(b.title)))
     })
     .get('/checkroute',verifyToken, (req,res) => {
         const permission = req.query.permission

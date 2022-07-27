@@ -4,8 +4,8 @@ const create = (inputImportOrder)=>{
    return importOrder.create(inputImportOrder);
 }
 
-const findAll = () => {
-    return importOrder.find({active:true})
+const findAll = (paginationOption) => {
+    return importOrder.paginate({active:true},paginationOption)
     .populate({
         path: 'details',
         populate: {path: 'product', select: 'name unit'},
