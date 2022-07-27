@@ -2,10 +2,13 @@ const {Router} = require('express');
 const exportOrderService = require('../services/ExportOrderService');
 const exportOrderDetailService = require('../services/ExportOrderDetailsService');
 const paymentService = require('../services/PaymentService');
-const warehouseService  = require('../services/WarehouseService')
+const warehouseService = require('../services/WarehouseService');
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
 const {verifyToken} = require('../middlewares/auth')
 const {payMoMo} = require('../middlewares/payMoMo')
+
+const moment = require('moment')
+
 const router = Router({ mergeParams: true })
 
 router
@@ -58,6 +61,71 @@ router
             .catch(err => {
                 console.log(err)
                 res.status(400).json({message: err});
+            })
+    })
+    
+    .get('/revenue', (req, res) => {
+        exportOrderDetailService.findAll()
+            .then(async exportOrderDetail => {
+                const results = await exportOrderDetail.reduce( async (revenueResults, exportOrderDetail) => {
+                    let results = await revenueResults
+                    const month = moment(exportOrderDetail.createdAt).month() + 1
+                    const year = moment(exportOrderDetail.createdAt).year()
+                    const day = moment(exportOrderDetail.createdAt).date()
+                    const warehouse = await warehouseService.findByProductId(exportOrderDetail.product)
+                    console.log(exportOrderDetail)
+                    console.log(warehouse)
+                    const myIncome = exportOrderDetail.productPrice * exportOrderDetail.productQuantity
+                    const myIncrement = (exportOrderDetail.productPrice - warehouse[0].stockPrice) * exportOrderDetail.productQuantity
+                  
+                    const existedYear = results.hasOwnProperty(year)
+                    if (existedYear) {
+                        const existedMonth = results[year].hasOwnProperty(month)
+                        if (existedMonth) {
+                            const existedDay = results[year][month].hasOwnProperty(day)
+                            if (existedDay) {
+                                results[year][month][day]['income'] += myIncome
+                                results[year][month][day]['increment'] += myIncrement
+                            } else {
+                                results[year][month] = {
+                                    ...results[year][month],
+                                    [day]: {
+                                        income: myIncome,
+                                        increment: myIncrement
+                                    }
+                                }
+                            }
+                        }
+                        else
+                            results[year] = {
+                                ...results[year],
+                                [month]: {
+                                    [day]: {
+                                        income: myIncome,
+                                        increment: myIncrement
+                                    }
+                                }
+                            }
+                    } else {
+                        results = {
+                            ...results,
+                            [year]: {
+                                [month]: {
+                                    [day]: {
+                                        income: myIncome,
+                                        increment: myIncrement
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return await results
+                }, new Object())
+                return res.status(200).json(results)
+            })
+            .catch(err => {
+                console.log(err)
+                return res.status(500).json({ message: err.toString() })
             })
     })
     .get('/customer', verifyToken, (req, res) => {

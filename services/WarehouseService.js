@@ -18,6 +18,10 @@ const findByProductId = (productId) => {
     return warehouse.find({product: productId,active: true})
 }
 
+const findByProductIdWithoutActive = (productId) => {
+    return warehouse.find({product: productId})
+}
+
 const findItemOutOfStock = (limit) => {
     return warehouse.find({stockQuantity: {$lt: limit}}).populate('product')
 }
@@ -101,4 +105,4 @@ const findAndSortBySoldQuantity = (limit) => {
     return warehouse.find({active: true}).sort({soldQuantity: -1}).limit(limit).populate('product')
 }
 
-module.exports = {create , findAll,findAndSortBySoldQuantity,findItemCommingExpire, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }
+module.exports = {create ,findByProductIdWithoutActive, findAll,findAndSortBySoldQuantity,findItemCommingExpire, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive }
