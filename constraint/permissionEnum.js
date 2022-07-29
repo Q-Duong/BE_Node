@@ -15,7 +15,7 @@ const COLLECTION_NAME = [
     'products'
 ]
 
-PERMISSION_TITLE_ENUM = []
+PERMISSION_TITLE_ENUM = [`read_dashboard`]
 COLLECTION_NAME.forEach(name => {
     PERMISSION_TITLE_ENUM.push(`read_${name}`)
     PERMISSION_TITLE_ENUM.push(`create_${name}`)
@@ -23,6 +23,7 @@ COLLECTION_NAME.forEach(name => {
     PERMISSION_TITLE_ENUM.push(`delete_${name}`)
 
 })
+
 module.exports = {
     PERMISSION_TITLE_ENUM
 }

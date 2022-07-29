@@ -18,9 +18,18 @@ router
             })
     })
     .get('/', (req,res)=>{
+        productService.findAll()
+            .then(supplier => {
+                res.status(200).json(supplier);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{
         const paginationOptions = getPaginationOptions(req)
 
-        productService.findAll(paginationOptions)
+        productService.findAllPaginate(paginationOptions)
             .then(products => {
                 res.status(200).json(products);
             })

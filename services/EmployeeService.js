@@ -22,7 +22,11 @@ const create = async (inputEmployee)=>{
     }
 }
 
-const findAll = (paginationOption) => {
+const findAll = () => {
+    return employee.find({active:true})
+}
+
+const findPaginate = (paginationOption) => {
     return employee.paginate({active:true},paginationOption)
 }
 
@@ -49,4 +53,4 @@ const update = (id, inputEmployee) =>{
     return employee.findOneAndUpdate({_id: id},{...inputEmployee}, {new:true});
 }
  
-module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail}
+module.exports = {create , findAll, findPaginate, findbyName, deleteOne, update ,findByEmail}

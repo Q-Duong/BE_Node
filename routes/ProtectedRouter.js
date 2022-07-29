@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer')
 router
     .get('/linkroute',verifyToken,(req,res)=>{
         const userReadPermission = req.user.role.permissions
-            .filter(permission => permission.title.includes('read_'))
+            .filter(permission => permission.title.includes('read_') && !permission.title.includes('details'))
             .map(permission => permission.title.substring(5).toLowerCase())
     
         let navbarNames = Object.keys(mongoose.connections[0].collections).map((collection,index) => ({

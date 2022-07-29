@@ -49,12 +49,32 @@ router
     .get('/admin', (req, res) => {
         const paginationOptions = getPaginationOptions(req)
         const filterOptions = getFilterOptions(req)
-        warehouseService.findAllWithoutActive(filterOptions,paginationOptions)
+        warehouseService.findAllWithoutActive(filterOptions, paginationOptions)
             .then(warehouses => {
-                res.status(200).json({...warehouses});
+                res.status(200).json({ ...warehouses });
             })
             .catch(err => {
                 res.status(400).json({ message: err });
+            })
+    })
+    .get('/inventoryStatistic', (req, res) => {
+        warehouseService.findAll()
+            .then(warehouses => {
+                const results = warehouses.reduce((results, warehouse) => {
+                    const soldWarehouse = warehouse.soldQuantity
+                    const stockWarehouse = warehouse.stockQuantity
+
+                    results[warehouse.product.name] = {
+                        soldWarehouse,
+                        stockWarehouse
+                    }
+                    return results
+                }, new Object())
+                return res.status(200).json(results)
+            })
+            .catch(err => {
+                console.log(err)
+                return res.status(500).json({ message: err.toString() })
             })
     })
     .get('/category/:id', (req, res) => {
@@ -87,7 +107,7 @@ router
             })
     })
     .get('/top/:limit', (req, res) => {
-        let {limit} = req.params
+        let { limit } = req.params
         limit = limit && Number(limit) > 0 ? limit : 10
         warehouseService.findAndSortBySoldQuantity(req.params.limit)
             .then(warehouse => {
@@ -97,6 +117,10 @@ router
                 res.status(400).json({ message: err });
             })
     })
+
+    // .get('/increment', (req, res) => {
+
+    // })
     .delete('/:id', (req, res) => {
         warehouseService.deleteOne(req.params.id)
             .then(warehouse => {

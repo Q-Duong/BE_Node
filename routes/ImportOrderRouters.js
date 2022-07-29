@@ -11,7 +11,8 @@ router
         const importOrderData = req.body.importOrderData;
         const purchasedProducts = req.body.purchasedProducts;
 
-        const promiseCreateOrder = importOrderService.create(importOrderData)
+        const promiseCreateOrder = importOrderService.create({...importOrderData,supplier:importOrderData.supplierId})
+        console.log(importOrderData)
         const promiseCreateDetailOrder = Promise.all(purchasedProducts.map(
             product => {
                 return importDetailOrderService.create({productId: product._id, productQuantity: product.stockQuantity, productPrice:product.stockPrice})                
@@ -58,13 +59,24 @@ router
             })
     })
     .get('/', (req,res)=>{
-        const paginationOptions = getPaginationOptions(req)
-
-        importOrderService.findAll(paginationOptions)
+        
+        importOrderService.findAll(req.body)
             .then(importOrder => {
                 res.status(200).json(importOrder);
             })
             .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{
+        const paginationOptions = getPaginationOptions(req)
+
+        importOrderService.findAllPaginate(paginationOptions)
+            .then(importOrder => {
+                res.status(200).json(importOrder);
+            })
+            .catch(err => {
+                console.log(err)
                 res.status(400).json({message: err});
             })
     })

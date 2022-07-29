@@ -18,6 +18,10 @@ const findByProductId = (productId) => {
     return warehouse.find({product: productId,active: true})
 }
 
+const findByProductIdWithoutActive = (productId) => {
+    return warehouse.find({product: productId})
+}
+
 const findItemOutOfStock = (limit) => {
     return warehouse.find({stockQuantity: {$lt: limit}}).populate('product')
 }
@@ -105,4 +109,5 @@ const findStatusDiscount = () => {
     return warehouse.find({active:true},{status:'khuyến mãi'}).sort({soldPirce: -1}).populate('product')
 }
 
-module.exports = {create , findAll,findAndSortBySoldQuantity,findItemCommingExpire, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }
+
+module.exports = {create ,findByProductIdWithoutActive, findAll,findAndSortBySoldQuantity,findItemCommingExpire, findItemOutOfStock,  findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }

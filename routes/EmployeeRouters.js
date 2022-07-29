@@ -69,9 +69,19 @@ router
         }
     })
     .get('/', (req,res)=>{
+        
+        employeeService.findAll(req.body)
+            .then(category => {
+                res.status(200).json(category);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{
         const paginationOptions = getPaginationOptions(req)
 
-        employeeService.findAll(paginationOptions)
+        employeeService.findPaginate(paginationOptions)
             .then(employee => {
                 res.status(200).json(employee);
             })

@@ -4,7 +4,11 @@ const create = (inputCustomer)=>{
    return customer.create(inputCustomer);
 }
 
-const findAll = (paginationOption) => {
+const findAll = () => {
+    return customer.find({active:true})
+}
+
+const findPaginate = (paginationOption) => {
     return customer.paginate({active:true},paginationOption)
 }
 
@@ -32,4 +36,4 @@ const updatePassword = (id,password) => {
     return customer.findOneAndUpdate({_id: id},{password}, {new:true});
 }
  
-module.exports = {create , findAll, findbyName, deleteOne, update ,findByEmail, findByPhone, updatePassword}
+module.exports = {create , findAll, findPaginate, findbyName, deleteOne, update ,findByEmail, findByPhone, updatePassword}

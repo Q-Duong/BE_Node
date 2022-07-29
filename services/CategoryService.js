@@ -4,7 +4,11 @@ const create = (inputCategory)=>{
    return category.create(inputCategory);
 }
 
-const findAll = (paginationOption) => {
+const findAll = () => {
+    return category.find({active:true})
+}
+
+const findPaginate = (paginationOption) => {
     return category.paginate({active:true},paginationOption)
 }
 
@@ -20,4 +24,4 @@ const update = (id, inputCategory) =>{
     return category.findOneAndUpdate({_id: id},{...inputCategory}, {new:true});
 }
 
-module.exports = {create , findAll, findbyName, deleteOne, update }
+module.exports = {create , findAll, findPaginate, findbyName, deleteOne, update }

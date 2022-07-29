@@ -123,9 +123,19 @@ router
         }
     })
     .get('/', (req,res)=>{
+        
+        customerService.findAll(req.body)
+            .then(category => {
+                res.status(200).json(category);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{
         const paginationOptions = getPaginationOptions(req)
 
-        customerService.findAll(paginationOptions)
+        customerService.findPaginate(paginationOptions)
             .then(customers => {
                 res.status(200).json(customers);
             })

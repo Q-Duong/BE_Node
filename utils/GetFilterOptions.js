@@ -2,27 +2,30 @@ const moment = require('moment')
 
 function getFilterOptions(req) {
     const { name, active, fromDate, toDate } = req.query
-    const aggregateMatch = {}
-    if (name) {
-        const names = Array.isArray(name) ? name : [name]
-        aggregateMatch['product.name'] = {
-                $in: names
-            }
+    const aggregateMatch = {}    
+    if (name && name != '') {
+        const queryName = name.trim()
+        const queryNameArr = queryName.split(' ').map(word => ({
+            'product.name': { $regex: `.*${word}.*`, $options: 'si' }
+        }))
+        queryNameArr.push({ 'product.name': { $regex: `.*${queryName}.*`, $options: 'si' } })
+        aggregateMatch['$or'] = queryNameArr
+        
     }
-    if (active) {
-        aggregateMatch.active = Boolean(active)
+    if (active && active != '') {
+        aggregateMatch.active = active === 'true'
     }
-    if (fromDate) {
+    if (fromDate && fromDate != '') {
         aggregateMatch.manufacturingDate = {
             $gte: moment(fromDate).toDate()
         }
     }
-    if (toDate) {
+    if (toDate && name != '') {
         aggregateMatch.expireIn = {
             $lte: moment(toDate).toDate()
         }
     }
-    
+
     const myAggregate = [
         {
             $lookup: {
@@ -39,6 +42,7 @@ function getFilterOptions(req) {
             $match: aggregateMatch
         }
     ]
+    console.log(myAggregate)
     return myAggregate
 }
 module.exports = getFilterOptions

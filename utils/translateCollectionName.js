@@ -34,8 +34,6 @@ function translateCollectionName(name) {
         case 'employees':
             result =  'Nhân viên'
             break;
-        
-        
         case 'payments':
             result =  'Thanh toán'
             break;

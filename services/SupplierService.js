@@ -14,6 +14,7 @@ const create = async (inputSupplier)=>{
 }
 
 const findAll = () => {
+
     return supplier.find({active:true}).populate('products')
 }
 

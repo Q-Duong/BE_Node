@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const abstractModel  = require("./AbstractModel");
 const mongoosePaginate = require('mongoose-paginate-v2');
+const mongooseArregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const exportOrderSchema = new mongoose.Schema({
     ...abstractModel,
@@ -36,6 +37,7 @@ const exportOrderSchema = new mongoose.Schema({
 });
 
 exportOrderSchema.plugin(mongoosePaginate)
+exportOrderSchema.plugin(mongooseArregatePaginate)
 const exportOrder = mongoose.model("exportOrder", exportOrderSchema);
 
 module.exports = exportOrder;

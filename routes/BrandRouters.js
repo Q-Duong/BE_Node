@@ -19,9 +19,8 @@ router
             })
     })
     .get('/', (req,res)=>{
-        const paginationOptions = getPaginationOptions(req)
-   
-        brandService.findAll(paginationOptions)
+    
+        brandService.findAll(req.body)
             .then(brand => {
                 res.status(200).json(brand);
             })
@@ -29,9 +28,20 @@ router
                 res.status(400).json({message: err});
             })
     })
-    .get('/admin', (req,res)=>{
-        
-        brandService.findWithoutActive(req.body)
+    .get('/deleted', (req,res)=>{
+    
+        brandService.findDelete(req.body)
+            .then(brand => {
+                res.status(200).json(brand);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{    
+        const paginationOptions = getPaginationOptions(req)
+
+        brandService.findPaginate(paginationOptions)
             .then(brand => {
                 res.status(200).json(brand);
             })
