@@ -11,5 +11,7 @@ const findAll = () => {
 const update = (id, inputpayment) =>{
     return payment.findOneAndUpdate({_id: id},{...inputpayment}, {new:true});
 }
-
-module.exports = {create , findAll, update }
+const updateStatus = (id, status) =>{
+    return payment.findOneAndUpdate({_id: id},{status}, {new:true});
+}
+module.exports = {create , findAll, update ,updateStatus}

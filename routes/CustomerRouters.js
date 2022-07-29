@@ -24,7 +24,7 @@ router
                         return customerService.create({...req.body,password: hashedPassword})
                     })
                     .then(createdCustomer => {
-                        const token = signToken(createdCustomer);
+                        const token = signToken(createdCustomer,'TOKEN');
                         return res.status(201).json({accessToken: token})
                     })
                     .catch(err=> {

@@ -22,13 +22,10 @@ router
             title: 'thống kê',
             heading: 'dashboard'
         })
-        console.log(Object.keys(mongoose.connections[0].collections))
         return res.json(navbarNames.sort((a,b) => a.title.localeCompare(b.title)))
     })
     .get('/checkroute',verifyToken, (req,res) => {
         const permission = req.query.permission
-        console.log(permission)
-        console.log(req.user.role.permissions)
         if(!req.user.role.permissions.some(p => p.title === permission))
             return res.status(401).json({message: 'you dont have permission to access'})
         else

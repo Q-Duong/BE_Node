@@ -30,7 +30,7 @@ router
             })
         ))
 
-        const promiseCreatePayment =  paymentService.create()
+        const promiseCreatePayment = exportOrderData.paymentMethod === 'MOMO'?  paymentService.create({type: "MoMo"}): paymentService.create()
 
         Promise.all([promiseCreateExportOrder, promiseCreateExportOrderDetails, promiseCreatePayment, promiseUpdateQuantityWarehouse])
             .then(results =>{
@@ -41,6 +41,7 @@ router
 
                 if(exportOrderData.paymentMethod === 'MOMO') {
                     req.exportOrder = results[0]
+                    req.payment = results[2]
                     return payMoMo(req,res)
                 } else 
                     return Promise.resolve({message: 'thanh toán thành công'})

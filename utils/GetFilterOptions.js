@@ -3,7 +3,7 @@ const moment = require('moment')
 function getFilterOptions(req) {
     const { name, active, fromDate, toDate } = req.query
     const aggregateMatch = {}    
-    if (name && name != '') {
+    if (name != "undefined" && name != '') {
         const queryName = name.trim()
         const queryNameArr = queryName.split(' ').map(word => ({
             'product.name': { $regex: `.*${word}.*`, $options: 'si' }
@@ -12,15 +12,15 @@ function getFilterOptions(req) {
         aggregateMatch['$or'] = queryNameArr
         
     }
-    if (active && active != '') {
+    if (active != "undefined" && active != '') {
         aggregateMatch.active = active === 'true'
     }
-    if (fromDate && fromDate != '') {
+    if (fromDate != "undefined" && fromDate != '') {
         aggregateMatch.manufacturingDate = {
             $gte: moment(fromDate).toDate()
         }
     }
-    if (toDate && name != '') {
+    if (toDate != "undefined" && name != '') {
         aggregateMatch.expireIn = {
             $lte: moment(toDate).toDate()
         }

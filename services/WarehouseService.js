@@ -33,8 +33,8 @@ const findItemCommingExpire = (fromDate,toDate) => {
     }}).populate('product')
 }
 
-const findByProductIdWithActive = (productId) => {
-    return warehouse.find({product: productId, active: true})
+const findByProductIdWithActive = (warehouseId, productId) => {
+    return warehouse.find({_id: {$ne: warehouseId},product: productId, active: true})
 }
 
 const findbyID = (id) => {

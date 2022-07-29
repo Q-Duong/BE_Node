@@ -1,66 +1,54 @@
 const {Router} = require('express');
+const exportOrderService = require('../services/ExportOrderService');
+const paymentService = require('../services/PaymentService');
+
+const config = process.env;
 const router = Router({ mergeParams: true })
 
 router
-.get('/', async (req, res) => {
+.post('/notification', async (req, res) => {
     try {
-        var partnerCode = "MOMOUR2S20210830";
-        var accessKey = "zV8bQQqebfkOpXm8";
-        var secretkey = "URjMechix19xzhkqAP7Ev1Zhqyo5ZWEt";
-        var requestId = partnerCode + new Date().getTime();
-        var orderId = requestId;
-        var orderInfo = "pay with MoMo";
-        var redirectUrl = "https://7b5e-183-80-239-100.ap.ngrok.io/test";
-        var ipnUrl = "https://7b5e-183-80-239-100.ap.ngrok.io";
-        var amount = "50000";
-        var requestType = "captureWallet"
-        var extraData = ""; //pass empty value if your merchant does not have stores
-    
+        console.log(req.body)
+        const body = req.body
+        const partnerCode = config.PARTNER_CODE;
+        const accessKey = config.ACCESS_KEY;
+        const secretkey = config.SECRET_KEY;
+        const orderId = body.orderId;
+        const requestId = body.requestId;
+        const orderInfo = body.orderInfo;
+        const amount = body.amount;
+        const orderType = body.orderType
+        const transId = body.transId
+        const resultCode = body.resultCode
+        const message = body.message
+        const payType = body.payType
+        const responseTime = body.responseTime
+        const extraData = body.extraData
+
         //before sign HMAC SHA256 with format
         //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-        var rawSignature = "accessKey="+accessKey+"&amount=" + amount+"&extraData=" + extraData+"&ipnUrl=" + ipnUrl+"&orderId=" + orderId+"&orderInfo=" + orderInfo+"&partnerCode=" + partnerCode +"&redirectUrl=" + redirectUrl+"&requestId=" + requestId+"&requestType=" + requestType
+        const rawSignature = "accessKey="+accessKey+"&amount=" + amount+"&extraData=" + extraData+ "&message="+ message +"&orderId=" + orderId+"&orderInfo=" + orderInfo+"&orderType="+orderType+"&partnerCode=" + partnerCode +"&payType=" + payType+"&requestId=" + requestId+"&responseTime="+responseTime+"&resultCode=" + resultCode+"&transId="+transId
         //puts raw signature
     
         //signature
         const crypto = require('crypto');
-        var signature = crypto.createHmac('sha256', secretkey)
+        const signature = crypto.createHmac('sha256', secretkey)
             .update(rawSignature)
             .digest('hex');
-    
-        //json object send to MoMo endpoint
-        const requestBody = JSON.stringify({
-            partnerCode : partnerCode,
-            accessKey : accessKey,
-            requestId : requestId,
-            amount : amount,
-            orderId : orderId,
-            orderInfo : orderInfo,
-            redirectUrl : redirectUrl,
-            ipnUrl : ipnUrl,
-            extraData : extraData,
-            requestType : requestType,
-            signature : signature,
-            lang: 'en'
-        });
-        //Create the HTTPS objects
-        const options = {
-            baseURL: 'https://test-payment.momo.vn',
-            port: 443,
-            url: '/v2/gateway/api/create',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(requestBody),
-            },
-            data: requestBody
+            console.log(signature)
+            console.log(body.signature)
+        if (signature == body.signature && body.resultCode == 0) {
+            const exportOrder = await exportOrderService.updateStatus(orderId,"Đơn hàng mới/ĐTT")
+            const payment = await paymentService.update(extraData,{status:"success",momoId:transId})
+            console.log(payment)
+
+            return res.status(200).end()
+        } else {
+            return res.status(400).end()
         }
-        //Send the request and get the response
-        const requestMoMo = await axios(options)
-        // res.header('Access-Control-Allow-Origin','*')
-        // res.header('Access-Control-Allow-Methods',['GET','OPTIONS'])
-        return res.status(200).json(requestMoMo.data.payUrl)
+
     } catch (error) {
-        console.log(error)
+        return res.status(500).end()
     }
 })
 

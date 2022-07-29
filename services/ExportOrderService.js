@@ -17,6 +17,10 @@ const findAll = () => {
     })
 }
 
+const findById = (id) => {
+    return exportOrder.findById(id)
+}
+
 const findByCustomerId = (customerId) => {
     return exportOrder.find({customer: customerId})
     .populate({
@@ -37,4 +41,8 @@ const update = (id, inputExportOrder) =>{
     return exportOrder.findOneAndUpdate({_id: id},{...inputExportOrder}, {new:true});
 }
 
-module.exports = {create , findAll, deleteOne, update, findByCustomerId }
+const updateStatus = (id, status) =>{
+    return exportOrder.findOneAndUpdate({_id: id},{status}, {new:true});
+}
+
+module.exports = {create , findAll, deleteOne, update, findByCustomerId, findById,updateStatus }

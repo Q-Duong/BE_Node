@@ -121,6 +121,7 @@ router
             })
     })
     .put('/:id', checkActiveProduct, (req, res) => {
+    
         if (req.body.soldPrice <= 0 && req.body.active === 'true')
             return res.status(400).json({ message: 'giá bán phải lớn hơn 0' })
         warehouseService.update(req.params.id, req.body)

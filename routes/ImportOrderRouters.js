@@ -10,7 +10,7 @@ router
         const importOrderData = req.body.importOrderData;
         const purchasedProducts = req.body.purchasedProducts;
 
-        const promiseCreateOrder = importOrderService.create(importOrderData)
+        const promiseCreateOrder = importOrderService.create({...importOrderData,supplier:importOrderData.supplierId})
         const promiseCreateDetailOrder = Promise.all(purchasedProducts.map(
             product => {
                 return importDetailOrderService.create({productId: product._id, productQuantity: product.stockQuantity, productPrice:product.stockPrice})                
