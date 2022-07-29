@@ -1,4 +1,5 @@
 const supplier  = require("../models/SupplierModel");
+const mongoose = require('mongoose');
 
 const create = async (inputSupplier)=>{
     try {
@@ -17,6 +18,22 @@ const findAll = () => {
     return supplier.find({active:true}).populate('products')
 }
 
+const findAllPaginate = (paginationOption) => {
+    const aggregate = supplier.aggregate(
+        [
+            {
+                $lookup:{
+                    from: 'products',
+                    localField: 'products',
+                    foreignField: '_id',
+                    as: 'products'
+                }
+            }
+        ]
+    )
+    return supplier.aggregatePaginate(aggregate,{...paginationOption})
+}
+
 const findbyName = (name) => {
     return supplier.findOne({name})
 }
@@ -33,4 +50,6 @@ const findbyId = (id) => {
     return supplier.findById(id)
 }
 
-module.exports = {create , findAll, findbyName, deleteOne, update, findbyId }
+
+
+module.exports = {create , findAll, findbyName, deleteOne, update, findbyId, findAllPaginate }

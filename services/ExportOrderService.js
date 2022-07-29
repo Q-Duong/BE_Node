@@ -6,7 +6,7 @@ const create = (inputExportOrder)=>{
 }
 
 const findAll = () => {
-    return exportOrder.find({active:true})
+    return exportOrder.find({active:true},)
     .populate({
         path: 'employee',
         select: 'name'
@@ -15,6 +15,62 @@ const findAll = () => {
         path: 'details',
         populate: {path: 'product', select: 'name unit'},
     })
+    .populate({
+        path: 'customer',
+        populate: {path: 'customer', select: 'name phone'},
+    })
+}
+
+const findAllPaginate = (paginationOption) => {
+    const aggregate = exportOrder.aggregate(
+        [
+            
+            {
+                $lookup:{
+                from: 'employees',
+                localField: 'employee',
+                foreignField: '_id',
+                as: 'employee'
+                }
+            },
+                
+            {
+                $lookup:{
+                from: 'customers',
+                localField: 'customer',
+                foreignField: '_id',
+                as: 'customer'
+                }
+                
+            },
+            {
+                $unwind: { path: "$customer" },
+            },
+            {
+                $lookup: {
+                    from: "exportorderdetails",
+                    localField: "details",
+                    foreignField: "_id",
+                    as: "details",
+                    pipeline: [
+                    {
+                        $lookup: {
+                        from: "products",
+                        localField: "product",
+                        foreignField: "_id",
+                        as: "product",
+                        },
+                    },
+                    {
+                        $unwind: { path: "$product" },
+                    },
+                    ],
+                },
+            }
+            
+        ]
+    )
+    return exportOrder.aggregatePaginate(aggregate,{...paginationOption})
 }
 
 const findById = (id) => {
@@ -45,4 +101,4 @@ const updateStatus = (id, status) =>{
     return exportOrder.findOneAndUpdate({_id: id},{status}, {new:true});
 }
 
-module.exports = {create , findAll, deleteOne, update, findByCustomerId, findById,updateStatus }
+module.exports = {create , findAll, deleteOne, update, findByCustomerId, findById,updateStatus,findAllPaginate }

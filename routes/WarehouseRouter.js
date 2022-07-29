@@ -96,6 +96,16 @@ router
                 res.status(400).json({ message: err });
             })
     })
+    .get('/discount/:id', (req, res) => {
+        console.log(req.params.id)
+        warehouseService.findStatusDiscount(req.params.id)
+            .then(warehouse => {
+                res.status(200).json(warehouse);
+            })
+            .catch(err => {
+                res.status(400).json({ message: err });
+            })
+    })
     .get('/top/:limit', (req, res) => {
         let { limit } = req.params
         limit = limit && Number(limit) > 0 ? limit : 10

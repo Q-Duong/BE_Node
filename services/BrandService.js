@@ -8,8 +8,20 @@ const findAll = () => {
     return brand.find({active:true})
 }
 
+const findDelete = () => {
+    return brand.find({active:false})
+}
+
+const findPaginate = (paginationOption) => {
+    return brand.paginate({active:true},paginationOption)
+}
+
 const findbyName = (brandName) => {
     return brand.findOne({brandName})
+}
+
+const findWithoutActive = () => {
+    return brand.fill({active:false})
 }
 
 const deleteOne = (id) => {
@@ -20,4 +32,4 @@ const update = (id, inputBrand) =>{
     return brand.findOneAndUpdate({_id: id},{...inputBrand}, {new:true});
 }
 
-module.exports = {create , findAll, findbyName, deleteOne, update }
+module.exports = {create , findAll, findDelete, findPaginate, findbyName, deleteOne, update, findWithoutActive }

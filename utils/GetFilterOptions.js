@@ -20,7 +20,7 @@ function getFilterOptions(req) {
             $gte: moment(fromDate).toDate()
         }
     }
-    if (toDate != "undefined" && name != '') {
+    if (toDate != "undefined" && toDate != '') {
         aggregateMatch.expireIn = {
             $lte: moment(toDate).toDate()
         }

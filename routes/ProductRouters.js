@@ -1,8 +1,9 @@
 const {Router} = require('express');
 const productService = require('../services/ProductService');
-const supplierService = require('../services/SupplierService')
-const router = Router({ mergeParams: true })
+const supplierService = require('../services/SupplierService');
+const router = Router({ mergeParams: true });
 const { uploadFile } = require('../middlewares/uploadFile');
+const getPaginationOptions = require('../utils/GetPaginationOptions');
 
 
 router
@@ -17,7 +18,18 @@ router
             })
     })
     .get('/', (req,res)=>{
-            productService.findAll(req.body)
+        productService.findAll()
+            .then(supplier => {
+                res.status(200).json(supplier);
+            })
+            .catch(err => {
+                res.status(400).json({message: err});
+            })
+    })
+    .get('/admin', (req,res)=>{
+        const paginationOptions = getPaginationOptions(req)
+
+        productService.findAllPaginate(paginationOptions)
             .then(products => {
                 res.status(200).json(products);
             })

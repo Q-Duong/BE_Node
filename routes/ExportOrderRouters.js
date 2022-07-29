@@ -6,6 +6,7 @@ const warehouseService = require('../services/WarehouseService');
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
 const {verifyToken} = require('../middlewares/auth')
 const {payMoMo} = require('../middlewares/payMoMo')
+const getPaginationOptions = require('../utils/GetPaginationOptions')
 
 const moment = require('moment')
 
@@ -55,6 +56,7 @@ router
             })
     })
     .get('/', (req,res)=>{
+        
         exportOrderService.findAll()
             .then(exportOrder => {
                 res.status(200).json(exportOrder);
@@ -64,7 +66,18 @@ router
                 res.status(400).json({message: err});
             })
     })
-    
+    .get('/admin', (req,res)=>{
+        const paginationOptions = getPaginationOptions(req)
+
+        exportOrderService.findAllPaginate(paginationOptions)
+            .then(exportOrder => {
+                res.status(200).json(exportOrder);
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(400).json({message: err});
+            })
+    })
     .get('/revenue', (req, res) => {
         exportOrderDetailService.findAll()
             .then(async exportOrderDetail => {
