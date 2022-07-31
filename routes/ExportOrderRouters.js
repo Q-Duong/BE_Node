@@ -57,7 +57,7 @@ router
                     return Promise.resolve({message: 'thanh toán thành công'})
             })
             .then(result => {
-                const accessToken = signToken(customer, 'TOKEN  ')
+                const accessToken = signToken(customer, 'TOKEN')
                 return res.status(201).json({...result, accessToken})
             })
             .catch(err => {

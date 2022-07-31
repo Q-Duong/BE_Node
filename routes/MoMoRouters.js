@@ -40,7 +40,6 @@ router
         if (signature == body.signature && body.resultCode == 0) {
             const exportOrder = await exportOrderService.updateStatus(orderId,"Đơn hàng mới/ĐTT")
             const payment = await paymentService.update(extraData,{status:"success",momoId:transId})
-            console.log(payment)
 
             return res.status(200).end()
         } else {

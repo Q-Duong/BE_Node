@@ -15,6 +15,7 @@ const {router:roleRouter} = require('./RoleRouters')
 const {router:protectedRoute} = require('./ProtectedRouter')
 const {router:notificationRoute} = require('./NotificationRouter')
 const {router:momoRoute} = require('./MoMoRouters')
+const {router:contactRoute} = require('./ContactRouter')
 
 router.use('/brand',brandRouter)
 router.use('/category',categoryRouter)
@@ -30,5 +31,6 @@ router.use('/role', roleRouter)
 router.use('/protected', protectedRoute)
 router.use('/notification', notificationRoute)
 router.use('/momo', momoRoute)
+router.use('/contact', contactRoute)
 
 module.exports = router
