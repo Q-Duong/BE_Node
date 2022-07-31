@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const roleService = require('../services/roleService');
 const permissionService = require('../services/permissionService');
+const { verifyByRole } = require('../middlewares/auth');
 
 const router = Router({ mergeParams: true })
 

@@ -4,19 +4,28 @@ const exportOrderDetailService = require('../services/ExportOrderDetailsService'
 const paymentService = require('../services/PaymentService');
 const warehouseService = require('../services/WarehouseService');
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
-const {verifyToken} = require('../middlewares/auth')
+const {verifyToken, verifyByRole} = require('../middlewares/auth')
 const {payMoMo} = require('../middlewares/payMoMo')
 const getPaginationOptions = require('../utils/GetPaginationOptions')
 
-const moment = require('moment')
+const moment = require('moment');
+const checkCustomerInfo = require('../middlewares/checkCustomerInfo');
+const { signToken } = require('../utils/SignToken');
 
 const router = Router({ mergeParams: true })
 
 router
-    .post('/',verifyToken, checkWarehouseQuantity, (req,res)=>{
+    .post('/',checkCustomerInfo, checkWarehouseQuantity, (req,res)=>{
         const exportOrderData = req.body.exportOrder
         const purchaseProductDatas = req.body.purchaseProducts
-        const promiseCreateExportOrder = exportOrderService.create({...exportOrderData,customer: req.user.id})
+        const customer = req.user
+        const promiseCreateExportOrder = exportOrderService.create(
+            {...exportOrderData,
+                customer: customer, 
+                customerName: exportOrderData.customer.name,
+                customerEmail: exportOrderData.customer.email,
+                customerPhone: exportOrderData.customer.phone
+            })
         const promiseCreateExportOrderDetails = Promise.all(purchaseProductDatas.map(
             purchaseProductData => exportOrderDetailService.create({
                 product: purchaseProductData.productId,
@@ -48,7 +57,8 @@ router
                     return Promise.resolve({message: 'thanh toán thành công'})
             })
             .then(result => {
-                return res.status(201).json(result)
+                const accessToken = signToken(customer, 'TOKEN  ')
+                return res.status(201).json({...result, accessToken})
             })
             .catch(err => {
                 console.log(err)
@@ -78,7 +88,7 @@ router
                 res.status(400).json({message: err});
             })
     })
-    .get('/revenue', (req, res) => {
+    .get('/revenue',verifyToken, verifyByRole(['ADMIN']), (req, res) => {
         exportOrderDetailService.findAll()
             .then(async exportOrderDetail => {
                 const results = await exportOrderDetail.reduce( async (revenueResults, exportOrderDetail) => {
@@ -87,8 +97,6 @@ router
                     const year = moment(exportOrderDetail.createdAt).year()
                     const day = moment(exportOrderDetail.createdAt).date()
                     const warehouse = await warehouseService.findByProductId(exportOrderDetail.product)
-                    console.log(exportOrderDetail)
-                    console.log(warehouse)
                     const myIncome = exportOrderDetail.productPrice * exportOrderDetail.productQuantity
                     const myIncrement = (exportOrderDetail.productPrice - warehouse[0].stockPrice) * exportOrderDetail.productQuantity
                   

@@ -30,6 +30,18 @@ const exportOrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "customer"
     },
+    customerName: {
+        type: String,
+        min:1
+    },
+    customerPhone: {
+        type: String,
+        min:10
+    },
+    customerEmail: {
+        type: String,
+        min:3
+    },
     details: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'exportOrderDetails'

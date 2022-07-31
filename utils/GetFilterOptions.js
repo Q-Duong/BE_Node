@@ -8,8 +8,10 @@ function getFilterOptions(req) {
         const queryNameArr = queryName.split(' ').map(word => ({
             'product.name': { $regex: `.*${word}.*`, $options: 'si' }
         }))
-        queryNameArr.push({ 'product.name': { $regex: `.*${queryName}.*`, $options: 'si' } })
-        aggregateMatch['$or'] = queryNameArr
+        aggregateMatch['$or'] = [
+            { 'product.name': { $regex: `.*${queryName}.*`, $options: 'si' } },
+            {$and: queryNameArr}
+        ]
         
     }
     if (active != "undefined" && active != '') {

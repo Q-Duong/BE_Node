@@ -3,6 +3,8 @@ const { checkActiveProduct } = require('../middlewares/checkActiveProduct');
 const warehouseService = require('../services/WarehouseService');
 const getFilterOptions = require('../utils/GetFilterOptions');
 const getPaginationOptions = require('../utils/GetPaginationOptions')
+const moment = require('moment');
+const { verifyToken, verifyByRole } = require('../middlewares/auth');
 const router = Router({ mergeParams: true })
 
 router
@@ -57,19 +59,37 @@ router
                 res.status(400).json({ message: err });
             })
     })
-    .get('/inventoryStatistic', (req, res) => {
-        warehouseService.findAll()
+    .get('/inventory',verifyToken, verifyByRole(['ADMIN']),(req, res) => {
+        const { next, prev } = req.query
+        const myMoment =
+            next ? moment().add(1, 'months') :
+                prev ? moment().add(-1, 'months') :
+                    moment()
+        const startDate = myMoment.startOf('month').format('YYYY-MM-DD');
+        const endDate = myMoment.endOf('month').format('YYYY-MM-DD');
+        warehouseService.findDuringMonth(startDate, endDate)
             .then(warehouses => {
-                const results = warehouses.reduce((results, warehouse) => {
-                    const soldWarehouse = warehouse.soldQuantity
-                    const stockWarehouse = warehouse.stockQuantity
+                console.log(warehouses)
 
-                    results[warehouse.product.name] = {
-                        soldWarehouse,
-                        stockWarehouse
+                const results = warehouses.reduce((results, warehouse) => {
+                    const expireIn = moment(warehouse.expireIn)
+                    const foundItem = results.find(result => result.product == warehouse.product.name)
+                    if(!foundItem){
+                        results.push({
+                            product: warehouse.product.name,
+                            totalQuantity: warehouse.stockQuantity,
+                            soldQuantity: warehouse.soldQuantity,
+                            comingToSell: warehouse.active ? 0 : warehouse.stockQuantity,
+                            comingExpiringQuantity: expireIn.diff(moment(),'days') > 10 ? 0 :- warehouse.stockQuantity,
+                        })
+                    } else {
+                        foundItem.totalQuantity += warehouse.stockQuantity
+                        foundItem.soldQuantity += warehouse.soldQuantity
+                        foundItem.comingToSell+= warehouse.active ? 0 : warehouse.stockQuantity 
+                        foundItem.comingExpiringQuantity -= expireIn.diff(moment(),'days') > 10 ? 0 : warehouse.stockQuantity
                     }
                     return results
-                }, new Object())
+                }, [])
                 return res.status(200).json(results)
             })
             .catch(err => {
@@ -118,9 +138,7 @@ router
             })
     })
 
-    // .get('/increment', (req, res) => {
 
-    // })
     .delete('/:id', (req, res) => {
         warehouseService.deleteOne(req.params.id)
             .then(warehouse => {
@@ -131,7 +149,7 @@ router
             })
     })
     .put('/:id', checkActiveProduct, (req, res) => {
-    
+
         if (req.body.soldPrice <= 0 && req.body.active === 'true')
             return res.status(400).json({ message: 'giá bán phải lớn hơn 0' })
         warehouseService.update(req.params.id, req.body)
