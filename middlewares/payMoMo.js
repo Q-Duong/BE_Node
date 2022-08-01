@@ -9,8 +9,8 @@ async function payMoMo (req, res) {
         const requestId = req.exportOrder._id;
         const orderId = req.exportOrder._id;
         const orderInfo = "pay with MoMo";
-        const ipnUrl = "https://7257-14-226-224-144.ap.ngrok.io/momo/notification";
-        const redirectUrl = "http://127.0.0.1:3000";
+        const ipnUrl = config.IPN_URL;
+        const redirectUrl = config.REDIRECT_URL;
         const amount = req.exportOrder.totalBill.toString();
         const requestType = "captureWallet"
         const extraData = req.payment._id; //pass empty value if your merchant does not have stores
@@ -53,9 +53,11 @@ async function payMoMo (req, res) {
         }
         //Send the request and get the response
         const requestMoMo = await axios(options)
+        console.log(requestMoMo)
     
         return Promise.resolve({payUrl: requestMoMo.data.payUrl})
     } catch (error) {
+        console.log(error)
         return Promise.reject({message: error.toString()})
     }
 }
