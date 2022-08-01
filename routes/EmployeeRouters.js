@@ -98,14 +98,5 @@ router
             res.status(400).json({message: err});
         })
     })
-    .put('/:id', (req,res)=>{
-        // const {employeeName,employeePhone,employeeAddress,employeeEmail,employeePassword,employeeActive} = req.body
-        
-        // const hashPassword = md5(employeePassword)
-
-        // employeeService.update(req.params.id, req.body)
-        //     .then(createdAcc=>res.status(200).json(createdAcc))
-        //     .catch(err => res.status(500).json({message:err}))
-    })
   
 module.exports = {router}

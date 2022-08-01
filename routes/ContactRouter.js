@@ -17,13 +17,13 @@ router
               port: 587,
               secure: false, // true for 465, false for other ports
               auth: {
-                user: 'phamanhtuan9a531@gmail.com', // generated ethereal user
-                pass: 'icbbcivwahkzxhak'
+                user: 'huynhquocduong789@gmail.com', // generated ethereal user
+                pass: 'vqecmhlvgbsmhdvt'
               },
             });
             // send mail with defined transport object
             let info = await transporter.sendMail({
-              to: "phamanhtuan9a531@gmail.com", // list of receivers
+              to: "huynhquocduong789@gmail.com", // list of receivers
               subject, // Subject line
               html: `<p>${name} đã gửi với lời nhắn: ${content}</p>`
             });

@@ -19,8 +19,13 @@ router
 
         navbarNames.unshift({
             id:navbarNames.length,
-            title: 'thống kê',
-            heading: 'dashboard'
+            title: 'thống kê doanh thu',
+            heading: 'revenue'
+        })
+        navbarNames.unshift({
+            id:navbarNames.length,
+            title: 'thống kê tồn kho',
+            heading: 'inventory'
         })
         return res.json(navbarNames.sort((a,b) => a.title.localeCompare(b.title)))
     })
