@@ -80,14 +80,14 @@ router
               port: 587,
               secure: false, // true for 465, false for other ports
               auth: {
-                user: 'phamanhtuan9a531@gmail.com', // generated ethereal user
-                pass: 'icbbcivwahkzxhak'
+                user: 'huynhquocduong789@gmail.com', // generated ethereal user
+                pass: 'vqecmhlvgbsmhdvt'
               },
             });
           
             // send mail with defined transport object
             let info = await transporter.sendMail({
-              from: '"Lão tôn 👻" <phamanhtuan9a531@gmail.com>', // sender address
+              from: '"Lão tôn 👻" <huynhquocduong789@gmail.com>', // sender address
               to: fromEmail, // list of receivers
               subject: "Forgot password", // Subject line
               html: `<h1>If you wanna to create new password please <a href="http://127.0.0.1:3000/updatepassword?token=${token}">click here</a>`, // html body
