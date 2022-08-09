@@ -46,7 +46,7 @@ router
                         arrPromise.push(warehouseService.update(warehouseId,{
                             stockQuantity: 0,
                             soldQuantity: warehouse.soldQuantity + warehouse.stockQuantity,
-                            soldPrice: warehouse.soldPrice,
+                            soldPrice: purchaseProductData.price,
                             active: false
                         }))
                         commingToSoldQuantity -= warehouse.stockQuantity
@@ -55,7 +55,7 @@ router
                         arrPromise.push(warehouseService.update(warehouseId,{
                             stockQuantity: warehouse.stockQuantity - commingToSoldQuantity,
                             soldQuantity: warehouse.soldQuantity + commingToSoldQuantity,
-                            soldPrice: warehouse.soldPrice,
+                            soldPrice: purchaseProductData.price,
                             active: commingToSoldQuantity === warehouse.stockQuantity ? false : true
                         }))
                         commingToSoldQuantity = 0
