@@ -69,6 +69,9 @@ router
                 res.status(400).json({ message: err })
             })
     })
+    .post('/test',uploadFile,(req,res) =>{
+        return res.json(req.file)
+    })
 
 
 module.exports = { router }

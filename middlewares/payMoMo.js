@@ -13,7 +13,7 @@ async function payMoMo (req, res) {
         const redirectUrl = config.REDIRECT_URL;
         const amount = req.exportOrder.totalBill.toString();
         const requestType = "captureWallet"
-        const extraData = req.payment._id; //pass empty value if your merchant does not have stores
+        const extraData = `${req.payment._id}splitString${req.accessToken}`; //pass empty value if your merchant does not have stores
     
         //before sign HMAC SHA256 with format
         //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
@@ -53,9 +53,8 @@ async function payMoMo (req, res) {
         }
         //Send the request and get the response
         const requestMoMo = await axios(options)
-        console.log(requestMoMo)
     
-        return Promise.resolve({payUrl: requestMoMo.data.payUrl})
+        return res.status(201).json({payUrl: requestMoMo.data.payUrl})
     } catch (error) {
         console.log(error)
         return Promise.reject({message: error.toString()})

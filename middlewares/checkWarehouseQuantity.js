@@ -4,8 +4,9 @@ async function checkWarehouseQuantity(req,res,next) {
     try {
         const purchasedProductDatas = req.body.purchaseProducts
         const promiseCheckQuantity = purchasedProductDatas.map(async purchasedProductData => {
-            const foundWarehouse = await warehouseService.findbyID(purchasedProductData.warehouseId)
-            if(foundWarehouse.stockQuantity < purchasedProductData.quantity)
+            const foundWarehouses = await warehouseService.findByProductIdAndNotExpire(purchasedProductData.productId)
+            console.log(foundWarehouses.reduce((total,warehouse) => total+warehouse.stockQuantity,0))
+            if(foundWarehouses.reduce((total,warehouse) => total+warehouse.stockQuantity,0) < purchasedProductData.quantity)
                 return Promise.reject(400)
             else 
                 return Promise.resolve()

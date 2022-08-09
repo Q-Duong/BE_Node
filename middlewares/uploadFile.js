@@ -12,14 +12,15 @@ const path = require('path');
 const storage = new CloudinaryStorage({
     cloudinary,
     params:{
-        folder:'img',
+        folder:'video',
         format : async (req,file) =>  path.extname(file.originalname).toLowerCase().substring(1),
-        public_id : (req,file) => file.fieldname + '-' + Date.now()
+        public_id : (req,file) => file.fieldname + '-' + Date.now(),
+        resource_type: 'auto'
     }
 })
 
 const fileFilter = (file,cb) =>{
-    const fileTypes =  /jpeg|jpg|png|gif/
+    const fileTypes =  /jpeg|jpg|png|gif|mp4/
 
     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase())
 
@@ -33,7 +34,7 @@ const fileFilter = (file,cb) =>{
 
 const upload = multer({
     storage:storage,
-    limits:{fileSize:10000000},
+    limits:{fileSize:100000000000},
     fileFilter: (req,file,cb)=>{
         fileFilter(file,cb)
     }

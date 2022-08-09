@@ -13,16 +13,25 @@ const findAll = () => {
             path: 'brand',
             model: 'brand'
         }
-    }).populate('supplier')
+    }).populate('supplier').sort({createdAt: -1})
 }
 
 const findAllWithoutActive = (filterOptions, paginationOption) => {
     const aggregate = warehouse.aggregate(filterOptions)
-    return warehouse.aggregatePaginate(aggregate, { ...paginationOption, sort: { active: -1, product: 1 } })
+    return warehouse.aggregatePaginate(aggregate, { ...paginationOption, sort: {createdAt: -1, active: -1, product: 1 } })
 }
 
 const findByProductId = (productId) => {
     return warehouse.find({ product: productId, active: true })
+}
+const findByProductIdAndNotExpire = (productId) => {
+    const now = new Date()
+    return warehouse.find({
+        product: productId,
+        expireIn: {
+            $gte: now
+        }
+    })
 }
 
 const findByProductIdWithoutActive = (productId) => {
@@ -80,17 +89,17 @@ const findBySearchTerm = (searchTerm) => {
                 as: 'product',
                 pipeline: [
                     {
-                      $lookup: {
-                        from: "brands",
-                        localField: "brand",
-                        foreignField: "_id",
-                        as: "brand",
-                      },
+                        $lookup: {
+                            from: "brands",
+                            localField: "brand",
+                            foreignField: "_id",
+                            as: "brand",
+                        },
                     },
                     {
-                      $unwind: { path: "$brand" },
+                        $unwind: { path: "$brand" },
                     },
-                  ],
+                ],
             }
         },
         {
@@ -117,17 +126,17 @@ const findbyCategoryID = (categoryId) => {
                 as: 'product',
                 pipeline: [
                     {
-                      $lookup: {
-                        from: "brands",
-                        localField: "brand",
-                        foreignField: "_id",
-                        as: "brand",
-                      },
+                        $lookup: {
+                            from: "brands",
+                            localField: "brand",
+                            foreignField: "_id",
+                            as: "brand",
+                        },
                     },
                     {
-                      $unwind: { path: "$brand" },
+                        $unwind: { path: "$brand" },
                     },
-                  ],
+                ],
             }
         },
         {
@@ -151,4 +160,8 @@ const findStatusDiscount = () => {
 }
 
 
-module.exports = { create, findByProductIdWithoutActive, findDuringMonth, findAll, findAndSortBySoldQuantity, findItemCommingExpire, findItemOutOfStock, findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount }
+module.exports = {
+    create, findByProductIdWithoutActive, findDuringMonth, findAll, findAndSortBySoldQuantity, findItemCommingExpire, findItemOutOfStock, findAllWithoutActive, deleteOne, update, findByProductId, findbyID, updateQuantity, findBySearchTerm, findbyCategoryID, findByProductIdWithActive, findStatusDiscount, findByProductIdAndNotExpire
+
+
+}

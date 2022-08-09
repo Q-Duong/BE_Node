@@ -1,11 +1,11 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const exportOrderService = require('../services/ExportOrderService');
 const exportOrderDetailService = require('../services/ExportOrderDetailsService');
 const paymentService = require('../services/PaymentService');
 const warehouseService = require('../services/WarehouseService');
 const { checkWarehouseQuantity } = require('../middlewares/checkWarehouseQuantity');
-const {verifyToken, verifyByRole} = require('../middlewares/auth')
-const {payMoMo} = require('../middlewares/payMoMo')
+const { verifyToken, verifyByRole } = require('../middlewares/auth')
+const { payMoMo } = require('../middlewares/payMoMo')
 const getPaginationOptions = require('../utils/GetPaginationOptions')
 
 const moment = require('moment');
@@ -15,13 +15,14 @@ const { signToken } = require('../utils/SignToken');
 const router = Router({ mergeParams: true })
 
 router
-    .post('/',checkCustomerInfo, checkWarehouseQuantity, (req,res)=>{
+    .post('/', checkCustomerInfo, checkWarehouseQuantity, (req, res) => {
         const exportOrderData = req.body.exportOrder
         const purchaseProductDatas = req.body.purchaseProducts
         const customer = req.user
         const promiseCreateExportOrder = exportOrderService.create(
-            {...exportOrderData,
-                customer: customer, 
+            {
+                ...exportOrderData,
+                customer: customer,
                 customerName: exportOrderData.customer.name,
                 customerEmail: exportOrderData.customer.email,
                 customerPhone: exportOrderData.customer.phone
@@ -33,50 +34,73 @@ router
                 productQuantity: purchaseProductData.quantity
             })
         ))
-        const promiseUpdateQuantityWarehouse =  Promise.all(purchaseProductDatas.map(
-            purchaseProductData => warehouseService.updateQuantity({
-                id: purchaseProductData.warehouseId,
-                quantity: purchaseProductData.quantity
-            })
+        const promiseUpdateQuantityWarehouse = Promise.all(purchaseProductDatas.map(
+            async purchaseProductData => {
+                let commingToSoldQuantity = purchaseProductData.quantity
+                const foundWarehouses = await warehouseService.findByProductIdAndNotExpire(purchaseProductData.productId)
+                return Promise.all(foundWarehouses.reduce((arrPromise, warehouse) => {
+                    const warehouseId = warehouse._id
+                    if (commingToSoldQuantity <= 0)
+                        return arrPromise
+                    else if (warehouse.stockQuantity < commingToSoldQuantity) {
+                        arrPromise.push(warehouseService.update(warehouseId,{
+                            stockQuantity: 0,
+                            soldQuantity: warehouse.soldQuantity + warehouse.stockQuantity,
+                            soldPrice: warehouse.soldPrice,
+                            active: false
+                        }))
+                        commingToSoldQuantity -= warehouse.stockQuantity
+                    }
+                    else {
+                        arrPromise.push(warehouseService.update(warehouseId,{
+                            stockQuantity: warehouse.stockQuantity - commingToSoldQuantity,
+                            soldQuantity: warehouse.soldQuantity + commingToSoldQuantity,
+                            soldPrice: warehouse.soldPrice,
+                            active: commingToSoldQuantity === warehouse.stockQuantity ? false : true
+                        }))
+                        commingToSoldQuantity = 0
+                    }
+                    return arrPromise
+                }, []))
+            }
         ))
 
-        const promiseCreatePayment = exportOrderData.paymentMethod === 'MOMO'?  paymentService.create({type: "MoMo"}): paymentService.create()
+        const promiseCreatePayment = exportOrderData.paymentMethod === 'MOMO' ? paymentService.create({ type: "MoMo" }) : paymentService.create()
 
         Promise.all([promiseCreateExportOrder, promiseCreateExportOrderDetails, promiseCreatePayment, promiseUpdateQuantityWarehouse])
-            .then(results =>{
+            .then(results => {
                 results[0].details = results[1]
                 results[0].save()
                 results[2].exportOrder = results[0]
                 results[2].save()
+                const accessToken = signToken(customer, 'TOKEN')
 
-                if(exportOrderData.paymentMethod === 'MOMO') {
+                if (exportOrderData.paymentMethod === 'MOMO') {
                     req.exportOrder = results[0]
                     req.payment = results[2]
-                    return payMoMo(req,res)
-                } else 
-                    return Promise.resolve({message: 'thanh toán thành công'})
-            })
-            .then(result => {
-                const accessToken = signToken(customer, 'TOKEN')
-                return res.status(201).json({...result, accessToken})
+                    req.accessToken = accessToken
+                    console.log(accessToken)
+                    return payMoMo(req, res)
+                } else
+                    return res.status(201).json({ orderId: results[0]._id, accessToken })
             })
             .catch(err => {
                 console.log(err)
-                return res.status(500).json({message: err})
+                return res.status(500).json({ message: err })
             })
     })
-    .get('/', (req,res)=>{
-        
+    .get('/', (req, res) => {
+
         exportOrderService.findAll()
             .then(exportOrder => {
                 res.status(200).json(exportOrder);
             })
             .catch(err => {
                 console.log(err)
-                res.status(400).json({message: err});
+                res.status(400).json({ message: err });
             })
     })
-    .get('/admin', (req,res)=>{
+    .get('/admin', (req, res) => {
         const paginationOptions = getPaginationOptions(req)
 
         exportOrderService.findAllPaginate(paginationOptions)
@@ -85,13 +109,13 @@ router
             })
             .catch(err => {
                 console.log(err)
-                res.status(400).json({message: err});
+                res.status(400).json({ message: err });
             })
     })
-    .get('/revenue',verifyToken, verifyByRole(['ADMIN']), (req, res) => {
+    .get('/revenue', verifyToken, verifyByRole(['ADMIN']), (req, res) => {
         exportOrderDetailService.findAll()
             .then(async exportOrderDetail => {
-                const results = await exportOrderDetail.reduce( async (revenueResults, exportOrderDetail) => {
+                const results = await exportOrderDetail.reduce(async (revenueResults, exportOrderDetail) => {
                     let results = await revenueResults
                     const month = moment(exportOrderDetail.createdAt).month() + 1
                     const year = moment(exportOrderDetail.createdAt).year()
@@ -99,7 +123,7 @@ router
                     const warehouse = await warehouseService.findByProductId(exportOrderDetail.product)
                     const myIncome = exportOrderDetail.productPrice * exportOrderDetail.productQuantity
                     const myIncrement = (exportOrderDetail.productPrice - warehouse[0].stockPrice) * exportOrderDetail.productQuantity
-                  
+
                     const existedYear = results.hasOwnProperty(year)
                     if (existedYear) {
                         const existedMonth = results[year].hasOwnProperty(month)
@@ -158,19 +182,19 @@ router
             })
             .catch(err => {
                 console.log(err)
-                res.status(400).json({message: err});
+                res.status(400).json({ message: err });
             })
 
     })
-    .patch('/:id', (req,res)=>{
+    .patch('/:id', (req, res) => {
         exportOrderService.update(req.params.id, req.body)
-        .then(exportOrder =>{
-            res.status(200).json(exportOrder)
-        })
-        .catch(err => {
-            res.status(400).json({message: 'gui lai request'})
-        })
+            .then(exportOrder => {
+                res.status(200).json(exportOrder)
+            })
+            .catch(err => {
+                res.status(400).json({ message: 'gui lai request' })
+            })
     })
-  
 
-    module.exports = {router}
+
+module.exports = { router }
